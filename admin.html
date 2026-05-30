@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#053c2a" />
+    <title>Admin | Edo Youths Scotland CIC Agency</title>
+    <link rel="icon" href="assets/eys-logo-gold-transparent.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header" data-header>
+      <a class="brand" href="index.html#home" aria-label="Edo Youths Scotland home">
+        <img class="brand-logo-rest" src="assets/eys-logo-white-transparent.png" alt="" aria-hidden="true" />
+        <img class="brand-logo-scrolled" src="assets/eys-logo-dark-transparent.png" alt="" aria-hidden="true" />
+        <span>Edo Youths<br />Scotland</span>
+      </a>
+
+      <button class="nav-toggle" data-nav-toggle type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-navigation">
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="nav-shell" data-nav id="site-navigation" aria-label="Primary navigation">
+        <a href="index.html#story">Story</a>
+        <a href="index.html#promise">Promise</a>
+        <a href="community.html">Community</a>
+        <a href="index.html#agency">Agency</a>
+        <a href="events.html">Events</a>
+        <a href="blog.html">Blog</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="button secondary" href="join.html">Join EYS</a>
+        <a class="button primary" href="index.html#partners">Partner with EYS</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="admin-shell" data-admin-app>
+        <div class="admin-heading">
+          <p class="page-kicker">Admin</p>
+          <h1>EYS operations panel</h1>
+          <p>Review joining requests and publish community updates from one quiet workspace.</p>
+        </div>
+
+        <section class="admin-login" data-admin-login>
+          <form class="admin-card admin-form" data-admin-login-form>
+            <h2>Sign in</h2>
+            <label>
+              Email
+              <input name="email" type="email" autocomplete="email" required />
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" autocomplete="current-password" required />
+            </label>
+            <button class="button primary" type="submit">Sign in</button>
+            <p class="form-status" data-admin-login-status role="status"></p>
+          </form>
+        </section>
+
+        <section class="admin-dashboard" data-admin-dashboard hidden>
+          <div class="admin-toolbar">
+            <div>
+              <p class="eyebrow">Signed in</p>
+              <strong data-admin-name>Admin</strong>
+            </div>
+            <button class="button secondary" type="button" data-admin-logout>Sign out</button>
+          </div>
+
+          <div class="admin-tabs" role="tablist" aria-label="Admin sections">
+            <button class="is-active" type="button" data-admin-tab="requests">Join requests</button>
+            <button type="button" data-admin-tab="blog">Blog posts</button>
+          </div>
+
+          <section class="admin-panel is-active" data-admin-panel="requests">
+            <div class="admin-panel-heading">
+              <h2>Join requests</h2>
+              <button class="button secondary" type="button" data-refresh-requests>Refresh</button>
+            </div>
+            <div class="admin-list" data-requests-list></div>
+          </section>
+
+          <section class="admin-panel" data-admin-panel="blog">
+            <div class="admin-panel-heading">
+              <h2>Blog posts</h2>
+              <button class="button secondary" type="button" data-refresh-posts>Refresh</button>
+            </div>
+
+            <form class="admin-card admin-form blog-editor" data-blog-editor>
+              <input name="id" type="hidden" />
+              <label>
+                Title
+                <input name="title" type="text" required />
+              </label>
+              <label>
+                Excerpt
+                <textarea name="excerpt" rows="3" required></textarea>
+              </label>
+              <label>
+                Body
+                <textarea name="body" rows="9" required></textarea>
+              </label>
+              <label>
+                Cover image URL
+                <input name="coverImageUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                Status
+                <select name="status">
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </label>
+              <div class="form-submit">
+                <button class="button primary" type="submit">Save post</button>
+                <button class="button secondary" type="button" data-clear-editor>Clear</button>
+              </div>
+              <p class="form-status" data-blog-editor-status role="status"></p>
+            </form>
+
+            <div class="admin-list" data-posts-list></div>
+          </section>
+        </section>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

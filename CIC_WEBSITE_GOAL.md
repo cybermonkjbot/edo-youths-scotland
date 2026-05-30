@@ -13,14 +13,13 @@ Goal: make the site credible as a complete CIC organization website, not only a 
 
 ## Current Build
 
-- Public pages: home, community, events, join, blog, members, impact.
+- Public pages: home, community, events, join, blog, members, impact, privacy, safeguarding, complaints and contact.
 - Backend: Convex tables and HTTP APIs for admin sessions, join requests, members and blog posts.
 - Admin panel: review join requests, promote requests into draft member profiles, manage members, publish blog posts.
 - Hosting: Azure Static Web App with GitHub Actions.
 
 ## Next CIC Completion Items
 
-- Add privacy, safeguarding and complaints policy pages.
 - Add annual impact report uploads or impact posts.
 - Add director/team governance profiles when confirmed.
 - Add partner logo/testimonial management.

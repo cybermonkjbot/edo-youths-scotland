@@ -7,11 +7,11 @@ The content and identity are rebuilt around the supplied EYS manifesto and logo 
 - Name: Edo Youths Scotland CIC Agency
 - Promise: Earn. Learn. Belong.
 - Positioning: Edo-rooted. Scotland-connected. Future-focused.
-- Core site sections: Story, Promise, Community, Agency, Members, Impact, Events, Blog, Join EYS
+- Core site sections: Story, Promise, Community, Agency, Members, Impact, Events, Blog, Join EYS, Privacy, Safeguarding, Complaints, Contact
 
 ## App Pieces
 
-- Public static pages: `index.html`, `community.html`, `members.html`, `impact.html`, `events.html`, `join.html`, `blog.html`
+- Public static pages: `index.html`, `community.html`, `members.html`, `impact.html`, `events.html`, `join.html`, `blog.html`, `privacy.html`, `safeguarding.html`, `complaints.html`, `contact.html`
 - Admin panel: `admin.html`
 - Convex backend: `convex/`
 - Azure Static Web App infrastructure: `infra/`

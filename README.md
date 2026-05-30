@@ -78,3 +78,7 @@ Add these GitHub repository secrets for CI/CD:
 - `CONVEX_HTTP_URL`
 
 The workflow in `.github/workflows/deploy-azure.yml` writes `config.js` from the secret and deploys the static app.
+
+## Cloudflare Caching
+
+The app is designed to keep Azure cheap: Azure Static Web Apps stays on the Free SKU, while `staticwebapp.config.json` sets cache headers for Cloudflare to reuse. See `CLOUDFLARE_CACHE_PLAN.md` for the Cache Rules to add after the custom domain is proxied through Cloudflare.

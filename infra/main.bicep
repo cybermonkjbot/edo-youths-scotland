@@ -1,4 +1,4 @@
-targetScope = 'subscription'
+targetScope = 'resourceGroup'
 
 @minLength(1)
 @maxLength(40)
@@ -23,15 +23,8 @@ var tags = {
   app: 'edo-youths-scotland'
 }
 
-resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
-  name: 'rg-eys-${environmentName}'
-  location: location
-  tags: tags
-}
-
 resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
   name: 'stapp-eys-${resourceToken}'
-  scope: rg
   location: location
   tags: tags
   sku: {
@@ -51,6 +44,6 @@ resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
   }
 }
 
-output AZURE_RESOURCE_GROUP string = rg.name
+output AZURE_RESOURCE_GROUP string = resourceGroup().name
 output STATIC_WEB_APP_NAME string = staticSite.name
 output STATIC_WEB_APP_HOSTNAME string = staticSite.properties.defaultHostname

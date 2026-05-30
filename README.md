@@ -63,8 +63,9 @@ The join form submits to `/api/join`; the public blog reads `/api/blog`; the adm
 Provision the very small frontend host:
 
 ```bash
-az deployment sub create \
-  --location westeurope \
+az group create --name rg-eys-prod --location westeurope
+az deployment group create \
+  --resource-group rg-eys-prod \
   --template-file infra/main.bicep \
   --parameters @infra/main.parameters.json
 ```

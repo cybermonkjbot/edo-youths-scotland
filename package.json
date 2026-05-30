@@ -9,6 +9,7 @@
     "check": "tsc --noEmit",
     "convex:dev": "convex dev",
     "convex:deploy": "convex deploy",
+    "convex:deploy:self-hosted": "convex deploy --cmd \"echo Skipping build\" --typecheck try",
     "admin:bootstrap": "convex run admin:bootstrap"
   },
   "dependencies": {

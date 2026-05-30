@@ -35,33 +35,28 @@
         <a href="community.html">Community</a>
         <a href="members.html">Members</a>
         <a href="events.html">Events</a>
+        <a href="gallery.html">Gallery</a>
         <a href="blog.html">Blog</a>
       </nav>
 
       <div class="header-actions">
         <a class="button secondary" href="join.html">Join EYS</a>
-        <a class="button primary" href="index.html#partners">Partner with EYS</a>
+        <a class="button primary" href="partner.html">Partner with EYS</a>
       </div>
     </header>
 
     <main id="main">
       <section class="admin-shell" data-admin-app>
-        <div class="admin-heading">
-          <p class="page-kicker">Admin</p>
-          <h1>EYS operations panel</h1>
-          <p>Review joining requests and publish community updates from one quiet workspace.</p>
-        </div>
-
         <section class="admin-login" data-admin-login>
-          <form class="admin-card admin-form" data-admin-login-form>
+          <form class="admin-form" data-admin-login-form>
             <h2>Sign in</h2>
             <label>
               Email
-              <input name="email" type="email" autocomplete="email" required />
+              <input name="email" type="email" autocomplete="email" placeholder="Email" required />
             </label>
             <label>
               Password
-              <input name="password" type="password" autocomplete="current-password" required />
+              <input name="password" type="password" autocomplete="current-password" placeholder="Password" required />
             </label>
             <button class="button primary" type="submit">Sign in</button>
             <p class="form-status" data-admin-login-status role="status"></p>
@@ -71,7 +66,6 @@
         <section class="admin-dashboard" data-admin-dashboard hidden>
           <div class="admin-toolbar">
             <div>
-              <p class="eyebrow">Signed in</p>
               <strong data-admin-name>Admin</strong>
             </div>
             <button class="button secondary" type="button" data-admin-logout>Sign out</button>
@@ -81,6 +75,8 @@
             <button class="is-active" type="button" data-admin-tab="requests">Join requests</button>
             <button type="button" data-admin-tab="members">Members</button>
             <button type="button" data-admin-tab="blog">Blog posts</button>
+            <button type="button" data-admin-tab="impact">Impact reports</button>
+            <button type="button" data-admin-tab="governance">Governance</button>
           </div>
 
           <section class="admin-panel is-active" data-admin-panel="requests">
@@ -109,7 +105,7 @@
               </label>
               <label>
                 Location
-                <input name="location" type="text" placeholder="Glasgow, Edinburgh, Aberdeen..." />
+                <input name="location" type="text" placeholder="Glasgow, Edinburgh, Aberdeen..." required />
               </label>
               <label>
                 Bio
@@ -133,7 +129,7 @@
               </label>
               <label>
                 Visibility
-                <select name="visibility">
+                <select name="visibility" required>
                   <option value="draft">Draft</option>
                   <option value="public">Public</option>
                   <option value="hidden">Hidden</option>
@@ -175,7 +171,7 @@
               </label>
               <label>
                 Status
-                <select name="status">
+                <select name="status" required>
                   <option value="draft">Draft</option>
                   <option value="published">Published</option>
                 </select>
@@ -189,11 +185,106 @@
 
             <div class="admin-list" data-posts-list></div>
           </section>
+
+          <section class="admin-panel" data-admin-panel="impact">
+            <div class="admin-panel-heading">
+              <h2>Impact reports</h2>
+              <button class="button secondary" type="button" data-refresh-impact-reports>Refresh</button>
+            </div>
+
+            <form class="admin-card admin-form impact-editor" data-impact-editor>
+              <input name="id" type="hidden" />
+              <label>
+                Title
+                <input name="title" type="text" placeholder="Annual impact note" required />
+              </label>
+              <label>
+                Period
+                <input name="period" type="text" placeholder="2026, Q1 2026, Jan-Mar 2026" required />
+              </label>
+              <label>
+                Summary
+                <textarea name="summary" rows="3" required></textarea>
+              </label>
+              <label>
+                Body
+                <textarea name="body" rows="8" required></textarea>
+              </label>
+              <label>
+                Metric highlights
+                <textarea name="metricHighlights" rows="4" placeholder="One highlight per line"></textarea>
+              </label>
+              <label>
+                Report file URL
+                <input name="fileUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                Status
+                <select name="status" required>
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              </label>
+              <div class="form-submit">
+                <button class="button primary" type="submit">Save report</button>
+                <button class="button secondary" type="button" data-clear-impact-editor>Clear</button>
+              </div>
+              <p class="form-status" data-impact-editor-status role="status"></p>
+            </form>
+
+            <div class="admin-list" data-impact-reports-list></div>
+          </section>
+
+          <section class="admin-panel" data-admin-panel="governance">
+            <div class="admin-panel-heading">
+              <h2>Governance profiles</h2>
+              <button class="button secondary" type="button" data-refresh-governance>Refresh</button>
+            </div>
+
+            <form class="admin-card admin-form governance-editor" data-governance-editor>
+              <input name="id" type="hidden" />
+              <label>
+                Name
+                <input name="name" type="text" placeholder="Board member, adviser or team group" required />
+              </label>
+              <label>
+                Role
+                <input name="role" type="text" placeholder="Director, Safeguarding lead, Community team" required />
+              </label>
+              <label>
+                Bio
+                <textarea name="bio" rows="6" required></textarea>
+              </label>
+              <label>
+                Image URL
+                <input name="imageUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                Sort order
+                <input name="sortOrder" type="number" step="1" value="100" required />
+              </label>
+              <label>
+                Visibility
+                <select name="visibility" required>
+                  <option value="draft">Draft</option>
+                  <option value="public">Public</option>
+                  <option value="hidden">Hidden</option>
+                </select>
+              </label>
+              <div class="form-submit">
+                <button class="button primary" type="submit">Save profile</button>
+                <button class="button secondary" type="button" data-clear-governance-editor>Clear</button>
+              </div>
+              <p class="form-status" data-governance-editor-status role="status"></p>
+            </form>
+
+            <div class="admin-list" data-governance-list></div>
+          </section>
         </section>
       </section>
     </main>
 
-    <script src="config.js?v=20260530-members"></script>
-    <script src="script.js?v=20260530-members"></script>
+    <script src="config.js?v=20260530-governance"></script>
+    <script src="script.js?v=20260530-governance"></script>
   </body>
 </html>

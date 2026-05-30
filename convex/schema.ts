@@ -70,4 +70,33 @@ export default defineSchema({
   })
     .index("by_slug", ["slug"])
     .index("by_status_published", ["status", "publishedAt"]),
+
+  impactReports: defineTable({
+    title: v.string(),
+    period: v.string(),
+    summary: v.string(),
+    body: v.string(),
+    metricHighlights: v.array(v.string()),
+    fileUrl: v.optional(v.string()),
+    status: v.union(v.literal("draft"), v.literal("published")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    publishedAt: v.optional(v.number()),
+  })
+    .index("by_status_published", ["status", "publishedAt"])
+    .index("by_created", ["createdAt"]),
+
+  governanceProfiles: defineTable({
+    name: v.string(),
+    role: v.string(),
+    bio: v.string(),
+    imageUrl: v.optional(v.string()),
+    sortOrder: v.number(),
+    visibility: v.union(v.literal("draft"), v.literal("public"), v.literal("hidden")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    publishedAt: v.optional(v.number()),
+  })
+    .index("by_visibility_sort", ["visibility", "sortOrder"])
+    .index("by_created", ["createdAt"]),
 });

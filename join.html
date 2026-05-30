@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Join Edo Youths Scotland CIC Agency as a member, volunteer, mentor, partner, creative, professional or friend of the community."
+      content="Choose how to join Edo Youths Scotland CIC Agency as a member, volunteer, mentor, creative, professional or friend of the community."
     />
-    <meta name="theme-color" content="#053c2a" />
+    <meta name="theme-color" content="#fffdf8" />
     <meta property="og:title" content="Join EYS | Edo Youths Scotland CIC Agency" />
-    <meta
-      property="og:description"
-      content="Tell EYS how you would like to take part in the community."
-    />
+    <meta property="og:description" content="Choose your EYS joining route." />
     <meta property="og:image" content="assets/Supplied/image-018.jpeg" />
     <title>Join EYS | Edo Youths Scotland CIC Agency</title>
     <link rel="icon" href="assets/eys-logo-gold-transparent.png" />
@@ -24,167 +21,22 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header" data-header>
-      <a class="brand" href="index.html#home" aria-label="Edo Youths Scotland home">
-        <img class="brand-logo-rest" src="assets/eys-logo-white-transparent.png" alt="" aria-hidden="true" />
-        <img class="brand-logo-scrolled" src="assets/eys-logo-dark-transparent.png" alt="" aria-hidden="true" />
-        <span>Edo Youths<br />Scotland</span>
-      </a>
-
-      <button class="nav-toggle" data-nav-toggle type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-navigation">
-        <span></span>
-        <span></span>
-      </button>
-
-      <nav class="nav-shell" data-nav id="site-navigation" aria-label="Primary navigation">
-        <a href="index.html#story">Story</a>
-        <a href="index.html#promise">Promise</a>
-        <a href="community.html">Community</a>
-        <a href="members.html">Members</a>
-        <a href="events.html">Events</a>
-        <a href="blog.html">Blog</a>
-      </nav>
-
-      <div class="header-actions">
-        <a class="button secondary" href="join.html">Join EYS</a>
-        <a class="button primary" href="index.html#partners">Partner with EYS</a>
-      </div>
-    </header>
-
+  <body class="flow-page">
+    <a class="flow-back" href="index.html#home" aria-label="Back to home">Back</a>
     <main id="main">
-      <section class="page-hero join-hero" style="--page-hero-image: url('assets/Supplied/image-018.jpeg')">
-        <div class="page-hero-inner">
-          <p class="page-kicker">Join EYS</p>
-          <h1>Help make home never feel far away.</h1>
-          <p>
-            Tell us how you would like to take part. EYS welcomes members, volunteers, mentors, creatives, professionals and friends of the community.
-          </p>
+      <section class="flow-screen join-choice-screen" aria-labelledby="join-title">
+        <div class="flow-copy">
+          <h1 id="join-title">Start your EYS connection.</h1>
+          <p>Choose the route that fits you. The next screen is only for your details.</p>
+          <nav class="action-routes" aria-label="Choose a joining pathway">
+            <a href="join-form.html?interest=Become%20a%20member">Become a member</a>
+            <a href="join-form.html?interest=Volunteer">Volunteer</a>
+            <a href="join-form.html?interest=Mentor%20young%20people">Mentor</a>
+            <a href="join-form.html?interest=Showcase%20my%20business%20or%20talent">Showcase</a>
+            <a href="partner.html">Partner</a>
+          </nav>
         </div>
-      </section>
-
-      <section class="final-cta join-section" id="join" aria-labelledby="join-title">
-        <div class="join-heading">
-          <h2 id="join-title">Start your EYS connection.</h2>
-          <p>
-            Share your interests, skills, business, support needs or partnership idea. The next step asks for an optional profile photo so EYS can prepare your member profile.
-          </p>
-        </div>
-
-        <form class="join-form" data-join-form>
-          <div class="form-step" data-details-step>
-            <div>
-              <p class="step-label">Step 1 of 2</p>
-              <h3>Your details</h3>
-            </div>
-
-            <div class="form-row">
-              <label for="join-name">Full name</label>
-              <input id="join-name" name="name" type="text" autocomplete="name" required />
-            </div>
-            <div class="form-row two-column">
-              <div>
-                <label for="join-email">Email</label>
-                <input id="join-email" name="email" type="email" autocomplete="email" required />
-              </div>
-              <div>
-                <label for="join-phone">Phone</label>
-                <input id="join-phone" name="phone" type="tel" autocomplete="tel" />
-              </div>
-            </div>
-            <div class="form-row two-column">
-              <div>
-                <label for="join-interest">I want to</label>
-                <select id="join-interest" name="interest" required>
-                  <option value="">Choose one</option>
-                  <option>Become a member</option>
-                  <option>Volunteer</option>
-                  <option>Mentor young people</option>
-                  <option>Showcase my business or talent</option>
-                  <option>Partner with EYS</option>
-                </select>
-              </div>
-              <div>
-                <label for="join-location">Location</label>
-                <input id="join-location" name="location" type="text" autocomplete="address-level2" placeholder="City or area" />
-              </div>
-            </div>
-            <div class="form-row">
-              <label for="join-message">Message</label>
-              <textarea id="join-message" name="message" rows="5" placeholder="Share your interests, skills, business, or how EYS can support you."></textarea>
-            </div>
-            <div class="form-submit">
-              <button class="button primary" type="submit">Continue</button>
-              <a class="button secondary" href="mailto:hello@edoyouthsscotland.org?subject=EYS%20conversation">Partner or sponsor</a>
-            </div>
-          </div>
-
-          <div class="profile-step" data-profile-step hidden>
-            <div>
-              <p class="step-label">Step 2 of 2</p>
-              <h3>Next, add your profile photo</h3>
-              <p>A clear photo helps EYS prepare your member profile and recognise you in the community.</p>
-            </div>
-            <label class="upload-box" for="profile-photo">
-              <span>Choose profile photo</span>
-              <small data-photo-name>JPG, PNG or WebP</small>
-              <input id="profile-photo" name="profilePhoto" type="file" accept="image/*" />
-            </label>
-            <div class="form-submit">
-              <button class="button primary" type="button" data-complete-join>Complete request</button>
-              <button class="button secondary" type="button" data-back-to-details>Back to details</button>
-            </div>
-            <p class="form-status" data-join-status role="status"></p>
-          </div>
-        </form>
       </section>
     </main>
-
-    <footer class="site-footer">
-      <div class="footer-brand">
-        <img src="assets/eys-logo-white-transparent.png" alt="" aria-hidden="true" />
-        <div>
-          <strong>Edo Youths Scotland CIC Agency</strong>
-          <p>Earn. Learn. Belong.</p>
-        </div>
-      </div>
-
-      <nav class="footer-links" aria-label="Footer navigation">
-        <div>
-          <h2>Explore</h2>
-          <a href="index.html#story">Story</a>
-          <a href="index.html#promise">Promise</a>
-          <a href="community.html">Community</a>
-          <a href="members.html">Members</a>
-          <a href="index.html#agency">Agency</a>
-          <a href="impact.html">Impact</a>
-          <a href="events.html">Events</a>
-          <a href="blog.html">Blog</a>
-        </div>
-        <div>
-          <h2>Take Part</h2>
-          <a href="join.html">Join EYS</a>
-          <a href="index.html#partners">Partner with EYS</a>
-          <a href="contact.html">Contact</a>
-          <a href="assets/Supplied/EYS_Community_Manifesto_and_Agency_Narrative_Toolkit.pdf" download>Download manifesto</a>
-          <a href="admin.html">Admin</a>
-        </div>
-        <div>
-          <h2>Assurance</h2>
-          <a href="privacy.html">Privacy</a>
-          <a href="safeguarding.html">Safeguarding</a>
-          <a href="complaints.html">Complaints</a>
-        </div>
-      </nav>
-
-      <div class="footer-bottom">
-        <span>Minority-led. Scotland-based. Edo-rooted.</span>
-        <a href="index.html#home">Back to top</a>
-      </div>
-    </footer>
-
-    <script src="config.js?v=20260530-members"></script>
-    <script src="script.js?v=20260530-members"></script>
   </body>
 </html>

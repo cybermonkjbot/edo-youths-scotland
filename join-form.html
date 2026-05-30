@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Send your joining, volunteering, mentoring, showcase or partnership details to Edo Youths Scotland CIC Agency."
+    />
+    <meta name="theme-color" content="#fffdf8" />
+    <meta property="og:title" content="EYS Details Form | Edo Youths Scotland CIC Agency" />
+    <meta property="og:description" content="Send your details to the EYS team." />
+    <meta property="og:image" content="assets/Supplied/image-018.jpeg" />
+    <title>EYS Details Form | Edo Youths Scotland CIC Agency</title>
+    <link rel="icon" href="assets/eys-logo-gold-transparent.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="flow-page">
+    <a class="flow-back" href="join.html" aria-label="Back to joining routes">Back</a>
+    <main id="main">
+      <section class="flow-screen flow-form-screen" aria-labelledby="join-form-title">
+        <div class="flow-copy compact flow-only-label">
+          <h1 id="join-form-title">Tell EYS where you fit.</h1>
+        </div>
+
+        <form class="join-form flow-form-panel" id="join-form" data-join-form data-flow-form>
+          <div class="form-step" data-details-step>
+            <section class="flow-question" data-flow-question>
+              <label for="join-name">What is your name?</label>
+              <input id="join-name" name="name" type="text" autocomplete="name" required />
+              <div class="flow-controls">
+                <button class="flow-pill primary" type="button" data-flow-next>Next</button>
+              </div>
+            </section>
+
+            <section class="flow-question" data-flow-question hidden>
+              <label for="join-email">What email should we use?</label>
+              <input id="join-email" name="email" type="email" autocomplete="email" required />
+              <div class="flow-controls">
+                <button class="flow-pill" type="button" data-flow-prev>Back</button>
+                <button class="flow-pill primary" type="button" data-flow-next>Next</button>
+              </div>
+            </section>
+
+            <section class="flow-question" data-flow-question hidden>
+              <label for="join-phone">Want to add a phone number?</label>
+              <input id="join-phone" name="phone" type="tel" autocomplete="tel" placeholder="Optional" />
+              <div class="flow-controls">
+                <button class="flow-pill" type="button" data-flow-prev>Back</button>
+                <button class="flow-pill primary" type="button" data-flow-next>Next</button>
+              </div>
+            </section>
+
+            <section class="flow-question" data-flow-question hidden>
+              <label for="join-interest">What do you want to do?</label>
+              <select id="join-interest" name="interest" required>
+                <option value="">Choose one</option>
+                <option>Become a member</option>
+                <option>Volunteer</option>
+                <option>Mentor young people</option>
+                <option>Showcase my business or talent</option>
+                <option>Partner with EYS</option>
+              </select>
+              <div class="flow-controls">
+                <button class="flow-pill" type="button" data-flow-prev>Back</button>
+                <button class="flow-pill primary" type="button" data-flow-next>Next</button>
+              </div>
+            </section>
+
+            <section class="flow-question" data-flow-question hidden>
+              <label for="join-location">Where are you based?</label>
+              <input id="join-location" name="location" type="text" autocomplete="address-level2" placeholder="City or area" required />
+              <div class="flow-controls">
+                <button class="flow-pill" type="button" data-flow-prev>Back</button>
+                <button class="flow-pill primary" type="button" data-flow-next>Next</button>
+              </div>
+            </section>
+
+            <section class="flow-question" data-flow-question hidden>
+              <label for="join-message">What should EYS know?</label>
+              <textarea id="join-message" name="message" rows="4" placeholder="Interests, skills, business, or support needed" required></textarea>
+              <div class="flow-controls">
+                <button class="flow-pill" type="button" data-flow-prev>Back</button>
+                <button class="flow-pill primary" type="button" data-flow-next>Next</button>
+              </div>
+            </section>
+          </div>
+
+          <section class="profile-step flow-question" data-profile-step data-flow-question hidden>
+            <label class="upload-box" for="profile-photo">
+              <span>Choose profile photo</span>
+              <small data-photo-name>JPG, PNG or WebP</small>
+              <input id="profile-photo" name="profilePhoto" type="file" accept="image/*" />
+            </label>
+            <div class="flow-controls">
+              <button class="flow-pill" type="button" data-flow-prev data-back-to-details>Back</button>
+              <button class="flow-pill primary" type="button" data-complete-join>Send</button>
+            </div>
+            <p class="form-status" data-join-status role="status"></p>
+          </section>
+        </form>
+      </section>
+    </main>
+
+    <script src="config.js?v=20260530-members"></script>
+    <script src="script.js?v=20260530-members"></script>
+  </body>
+</html>

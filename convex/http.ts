@@ -10,6 +10,14 @@ const functions = {
   blogListForAdmin: makeFunctionReference<"query">("blogPosts:listForAdmin"),
   blogListPublic: makeFunctionReference<"query">("blogPosts:listPublic"),
   blogUpdate: makeFunctionReference<"mutation">("blogPosts:update"),
+  governanceCreate: makeFunctionReference<"mutation">("governanceProfiles:create"),
+  governanceListForAdmin: makeFunctionReference<"query">("governanceProfiles:listForAdmin"),
+  governanceListPublic: makeFunctionReference<"query">("governanceProfiles:listPublic"),
+  governanceUpdate: makeFunctionReference<"mutation">("governanceProfiles:update"),
+  impactCreate: makeFunctionReference<"mutation">("impactReports:create"),
+  impactListForAdmin: makeFunctionReference<"query">("impactReports:listForAdmin"),
+  impactListPublic: makeFunctionReference<"query">("impactReports:listPublic"),
+  impactUpdate: makeFunctionReference<"mutation">("impactReports:update"),
   joinListForAdmin: makeFunctionReference<"query">("joinRequests:listForAdmin"),
   joinSubmit: makeFunctionReference<"mutation">("joinRequests:submit"),
   joinUpdateStatus: makeFunctionReference<"mutation">("joinRequests:updateStatus"),
@@ -219,6 +227,32 @@ http.route({
 });
 
 http.route({
+  path: "/api/impact-reports",
+  method: "GET",
+  handler: httpActionGeneric(async (ctx) => {
+    try {
+      const result = await ctx.runQuery(functions.impactListPublic, {});
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/governance-profiles",
+  method: "GET",
+  handler: httpActionGeneric(async (ctx) => {
+    try {
+      const result = await ctx.runQuery(functions.governanceListPublic, {});
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
   path: "/api/admin/members",
   method: "GET",
   handler: httpActionGeneric(async (ctx, request) => {
@@ -274,6 +308,104 @@ http.route({
     try {
       const data = await body(request);
       const result = await ctx.runMutation(functions.memberUpdate, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/impact-reports",
+  method: "GET",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const result = await ctx.runQuery(functions.impactListForAdmin, {
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error, 401);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/impact-reports",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.impactCreate, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/impact-reports/update",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.impactUpdate, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/governance-profiles",
+  method: "GET",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const result = await ctx.runQuery(functions.governanceListForAdmin, {
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error, 401);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/governance-profiles",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.governanceCreate, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/governance-profiles/update",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.governanceUpdate, {
         ...data,
         sessionToken: sessionTokenFrom(request),
       });

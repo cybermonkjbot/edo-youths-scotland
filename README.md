@@ -26,11 +26,18 @@ Then open `http://localhost:4173`.
 
 ## Backend
 
-Create or connect a Convex deployment, then set the frontend URL in `config.js`.
+EYS uses the shared self-hosted Convex VM already used by the Cribnosh projects.
+The public endpoints are:
+
+- Backend/client: `https://api.edoyouths.uk`
+- HTTP actions/site: `https://site.edoyouths.uk`
+- Dashboard: `https://convex.edoyouths.uk`
+
+Set the frontend URL in `config.js` to the HTTP actions/site endpoint.
 
 ```bash
 cp .env.example .env
-npm run convex:dev
+npm run convex:deploy:self-hosted
 ```
 
 Set these Convex environment variables before bootstrapping the first admin:
@@ -48,11 +55,11 @@ Then create or update the admin account:
 npm run admin:bootstrap -- '{"bootstrapToken":"replace-with-a-long-random-token"}'
 ```
 
-Use the generated Convex HTTP actions URL in `config.js`:
+Use the self-hosted Convex HTTP actions URL in `config.js`:
 
 ```js
 window.EYS_CONFIG = {
-  CONVEX_HTTP_URL: "https://your-convex-deployment.convex.site",
+  CONVEX_HTTP_URL: "https://site.edoyouths.uk",
 };
 ```
 

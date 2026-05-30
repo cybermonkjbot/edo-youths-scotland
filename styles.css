@@ -87,6 +87,10 @@ img {
   color: var(--white);
 }
 
+.site-header.on-light-surface:not(.is-scrolled):not(.nav-active) .brand {
+  color: var(--green);
+}
+
 .site-header:not(.is-scrolled):not(.nav-active) .header-actions .button.secondary {
   background: var(--orange);
   color: var(--white);
@@ -145,8 +149,16 @@ img {
   display: none;
 }
 
+.site-header.on-light-surface:not(.is-scrolled):not(.nav-active) .brand-logo-rest {
+  display: none;
+}
+
 .site-header.is-scrolled .brand-logo-scrolled,
 .site-header.nav-active .brand-logo-scrolled {
+  display: block;
+}
+
+.site-header.on-light-surface:not(.is-scrolled):not(.nav-active) .brand-logo-scrolled {
   display: block;
 }
 
@@ -506,6 +518,12 @@ img {
 
 .section-heading.compact {
   margin-bottom: 38px;
+}
+
+.section-heading.left {
+  margin-right: 0;
+  margin-left: 0;
+  text-align: left;
 }
 
 .services {
@@ -1255,7 +1273,8 @@ img {
 
 .admin-card,
 .admin-item,
-.blog-card {
+.blog-card,
+.member-card {
   border: 1px solid rgba(5, 60, 42, 0.14);
   border-radius: 8px;
   background: var(--white);
@@ -1360,12 +1379,29 @@ img {
   line-height: 1.55;
 }
 
+.mini-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mini-tags span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(5, 60, 42, 0.08);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 900;
+}
+
 .blog-shell {
   display: grid;
   gap: 26px;
 }
 
-.blog-grid {
+.blog-grid,
+.members-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
@@ -1450,6 +1486,74 @@ img {
 .blog-body {
   display: grid;
   gap: 18px;
+}
+
+.members-shell {
+  display: grid;
+  gap: 26px;
+}
+
+.member-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+.member-card img,
+.member-avatar {
+  width: 100%;
+  height: 260px;
+}
+
+.member-card img {
+  object-fit: cover;
+}
+
+.member-avatar {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(135deg, rgba(5, 60, 42, 0.96), rgba(16, 19, 29, 0.94)),
+    url("assets/eys-logo-gold-green.png");
+  background-position: center;
+  background-size: cover;
+  color: var(--gold-soft);
+  font-size: 58px;
+  font-weight: 900;
+}
+
+.member-card-body {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 24px;
+}
+
+.member-card h2 {
+  margin: 0;
+  color: var(--green);
+  font-size: 28px;
+  line-height: 1.12;
+}
+
+.member-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.member-location {
+  font-weight: 900;
+}
+
+.member-project {
+  display: grid;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.member-project strong {
+  color: var(--green);
 }
 
 .site-footer {
@@ -1621,7 +1725,8 @@ img {
   .promise-grid,
   .service-grid,
   .event-list,
-  .blog-grid {
+  .blog-grid,
+  .members-grid {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -1747,7 +1852,8 @@ img {
 
   .image-strip,
   .event-list,
-  .blog-grid {
+  .blog-grid,
+  .members-grid {
     grid-template-columns: 1fr;
   }
 

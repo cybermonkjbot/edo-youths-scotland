@@ -13,6 +13,11 @@ const functions = {
   joinListForAdmin: makeFunctionReference<"query">("joinRequests:listForAdmin"),
   joinSubmit: makeFunctionReference<"mutation">("joinRequests:submit"),
   joinUpdateStatus: makeFunctionReference<"mutation">("joinRequests:updateStatus"),
+  memberCreate: makeFunctionReference<"mutation">("members:create"),
+  memberCreateFromJoinRequest: makeFunctionReference<"mutation">("members:createFromJoinRequest"),
+  memberListForAdmin: makeFunctionReference<"query">("members:listForAdmin"),
+  memberListPublic: makeFunctionReference<"query">("members:listPublic"),
+  memberUpdate: makeFunctionReference<"mutation">("members:update"),
 };
 
 function json(data: unknown, status = 200) {
@@ -190,6 +195,85 @@ http.route({
     try {
       const data = await body(request);
       const result = await ctx.runMutation(functions.blogUpdate, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/members",
+  method: "GET",
+  handler: httpActionGeneric(async (ctx) => {
+    try {
+      const result = await ctx.runQuery(functions.memberListPublic, {});
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/members",
+  method: "GET",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const result = await ctx.runQuery(functions.memberListForAdmin, {
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error, 401);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/members",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.memberCreate, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/members/from-request",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.memberCreateFromJoinRequest, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/members/update",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.memberUpdate, {
         ...data,
         sessionToken: sessionTokenFrom(request),
       });

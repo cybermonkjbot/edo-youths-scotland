@@ -38,6 +38,24 @@ export default defineSchema({
     .index("by_status_created", ["status", "createdAt"])
     .index("by_created", ["createdAt"]),
 
+  members: defineTable({
+    name: v.string(),
+    role: v.string(),
+    location: v.optional(v.string()),
+    bio: v.string(),
+    skills: v.array(v.string()),
+    businessName: v.optional(v.string()),
+    websiteUrl: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
+    sourceJoinRequestId: v.optional(v.id("joinRequests")),
+    visibility: v.union(v.literal("draft"), v.literal("public"), v.literal("hidden")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    publishedAt: v.optional(v.number()),
+  })
+    .index("by_visibility_published", ["visibility", "publishedAt"])
+    .index("by_created", ["createdAt"]),
+
   blogPosts: defineTable({
     title: v.string(),
     slug: v.string(),

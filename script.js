@@ -289,6 +289,9 @@ if (adminApp) {
   const loginStatus = adminApp.querySelector("[data-admin-login-status]");
   const adminName = adminApp.querySelector("[data-admin-name]");
   const requestsList = adminApp.querySelector("[data-requests-list]");
+  const membersList = adminApp.querySelector("[data-members-list]");
+  const memberEditor = adminApp.querySelector("[data-member-editor]");
+  const memberEditorStatus = adminApp.querySelector("[data-member-editor-status]");
   const postsList = adminApp.querySelector("[data-posts-list]");
   const editor = adminApp.querySelector("[data-blog-editor]");
   const editorStatus = adminApp.querySelector("[data-blog-editor-status]");
@@ -333,14 +336,110 @@ if (adminApp) {
                   <div class="admin-item-meta">
                     <span class="status-pill">${escapeHtml(request.status)}</span>
                     <time>${formatDate(request.createdAt)}</time>
+                    <button class="button secondary compact-button" type="button" data-promote-request="${escapeHtml(request._id)}">Make member</button>
                   </div>
                 </article>
               `,
             )
             .join("")
         : '<p class="empty-state">No join requests yet.</p>';
+
+      requestsList.querySelectorAll("[data-promote-request]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          button.textContent = "Creating...";
+          button.disabled = true;
+
+          try {
+            await eysApi("/api/admin/members/from-request", {
+              method: "POST",
+              token: token(),
+              body: {
+                id: button.dataset.promoteRequest,
+                visibility: "draft",
+              },
+            });
+            await Promise.all([loadRequests(), loadMembers()]);
+          } catch (error) {
+            button.textContent = error.message;
+          }
+        });
+      });
     } catch (error) {
       requestsList.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
+    }
+  };
+
+  const memberPayload = (form) => {
+    const formData = new FormData(form);
+    return {
+      name: formData.get("name"),
+      role: formData.get("role"),
+      location: formData.get("location"),
+      bio: formData.get("bio"),
+      skills: formData.get("skills"),
+      businessName: formData.get("businessName"),
+      websiteUrl: formData.get("websiteUrl"),
+      imageUrl: formData.get("imageUrl"),
+      visibility: formData.get("visibility"),
+    };
+  };
+
+  const fillMemberEditor = (member) => {
+    if (!memberEditor) return;
+    memberEditor.elements.id.value = member._id;
+    memberEditor.elements.name.value = member.name;
+    memberEditor.elements.role.value = member.role;
+    memberEditor.elements.location.value = member.location || "";
+    memberEditor.elements.bio.value = member.bio;
+    memberEditor.elements.skills.value = (member.skills || []).join(", ");
+    memberEditor.elements.businessName.value = member.businessName || "";
+    memberEditor.elements.websiteUrl.value = member.websiteUrl || "";
+    memberEditor.elements.imageUrl.value = member.imageUrl || "";
+    memberEditor.elements.visibility.value = member.visibility;
+    memberEditor.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  const loadMembers = async () => {
+    if (!membersList) return;
+    membersList.innerHTML = '<p class="empty-state">Loading members...</p>';
+
+    try {
+      const members = await eysApi("/api/admin/members", { token: token() });
+      membersList.innerHTML = members.length
+        ? members
+            .map(
+              (member) => `
+                <article class="admin-item">
+                  <div>
+                    <div class="admin-item-title">${escapeHtml(member.name)}</div>
+                    <p><strong>${escapeHtml(member.role)}</strong>${member.location ? ` · ${escapeHtml(member.location)}` : ""}</p>
+                    <p>${escapeHtml(member.bio)}</p>
+                    ${
+                      member.skills?.length
+                        ? `<div class="mini-tags">${member.skills.map((skill) => `<span>${escapeHtml(skill)}</span>`).join("")}</div>`
+                        : ""
+                    }
+                    ${member.businessName ? `<p>Project: ${escapeHtml(member.businessName)}</p>` : ""}
+                  </div>
+                  <div class="admin-item-meta">
+                    <span class="status-pill">${escapeHtml(member.visibility)}</span>
+                    <time>${formatDate(member.publishedAt || member.updatedAt)}</time>
+                    <button class="button secondary compact-button" type="button" data-edit-member="${escapeHtml(member._id)}">Edit</button>
+                  </div>
+                </article>
+              `,
+            )
+            .join("")
+        : '<p class="empty-state">No member profiles yet. Promote a join request or create one above.</p>';
+
+      membersList.querySelectorAll("[data-edit-member]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const member = members.find((item) => item._id === button.dataset.editMember);
+          if (member) fillMemberEditor(member);
+        });
+      });
+    } catch (error) {
+      membersList.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
     }
   };
 
@@ -405,7 +504,7 @@ if (adminApp) {
       localStorage.setItem(tokenKey, result.token);
       setStatus(loginStatus, "");
       setSignedIn(result.admin);
-      await Promise.all([loadRequests(), loadPosts()]);
+      await Promise.all([loadRequests(), loadMembers(), loadPosts()]);
     } catch (error) {
       setStatus(loginStatus, error.message, "error");
     }
@@ -429,11 +528,38 @@ if (adminApp) {
   });
 
   adminApp.querySelector("[data-refresh-requests]")?.addEventListener("click", loadRequests);
+  adminApp.querySelector("[data-refresh-members]")?.addEventListener("click", loadMembers);
   adminApp.querySelector("[data-refresh-posts]")?.addEventListener("click", loadPosts);
+  adminApp.querySelector("[data-clear-member-editor]")?.addEventListener("click", () => {
+    memberEditor?.reset();
+    if (memberEditor?.elements.id) memberEditor.elements.id.value = "";
+    setStatus(memberEditorStatus, "");
+  });
   adminApp.querySelector("[data-clear-editor]")?.addEventListener("click", () => {
     editor?.reset();
     if (editor?.elements.id) editor.elements.id.value = "";
     setStatus(editorStatus, "");
+  });
+
+  memberEditor?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setStatus(memberEditorStatus, "Saving...");
+    const formData = new FormData(memberEditor);
+    const id = formData.get("id");
+
+    try {
+      await eysApi(id ? "/api/admin/members/update" : "/api/admin/members", {
+        method: "POST",
+        token: token(),
+        body: id ? { id, ...memberPayload(memberEditor) } : memberPayload(memberEditor),
+      });
+      memberEditor.reset();
+      memberEditor.elements.id.value = "";
+      setStatus(memberEditorStatus, "Saved.", "success");
+      await loadMembers();
+    } catch (error) {
+      setStatus(memberEditorStatus, error.message, "error");
+    }
   });
 
   editor?.addEventListener("submit", async (event) => {
@@ -468,10 +594,75 @@ if (adminApp) {
     eysApi("/api/admin/me", { token: token() })
       .then(async (admin) => {
         setSignedIn(admin);
-        await Promise.all([loadRequests(), loadPosts()]);
+        await Promise.all([loadRequests(), loadMembers(), loadPosts()]);
       })
       .catch(setSignedOut);
   }
+}
+
+const membersApp = document.querySelector("[data-members-app]");
+
+if (membersApp) {
+  const status = membersApp.querySelector("[data-members-status]");
+  const list = membersApp.querySelector("[data-members-list]");
+
+  const initials = (name) =>
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("");
+
+  const renderMembers = (members) => {
+    if (!list) return;
+    list.innerHTML = members.length
+      ? members
+          .map(
+            (member) => `
+              <article class="member-card">
+                ${
+                  member.imageUrl
+                    ? `<img src="${escapeHtml(member.imageUrl)}" alt="${escapeHtml(member.name)}" />`
+                    : `<div class="member-avatar" aria-hidden="true">${escapeHtml(initials(member.name))}</div>`
+                }
+                <div class="member-card-body">
+                  <p class="eyebrow">${escapeHtml(member.role)}</p>
+                  <h2>${escapeHtml(member.name)}</h2>
+                  ${member.location ? `<p class="member-location">${escapeHtml(member.location)}</p>` : ""}
+                  <p>${escapeHtml(member.bio)}</p>
+                  ${
+                    member.skills?.length
+                      ? `<div class="mini-tags">${member.skills.map((skill) => `<span>${escapeHtml(skill)}</span>`).join("")}</div>`
+                      : ""
+                  }
+                  ${
+                    member.businessName || member.websiteUrl
+                      ? `<div class="member-project">
+                          ${member.businessName ? `<strong>${escapeHtml(member.businessName)}</strong>` : ""}
+                          ${member.websiteUrl ? `<a class="text-link" href="${escapeHtml(member.websiteUrl)}" target="_blank" rel="noreferrer">Visit link</a>` : ""}
+                        </div>`
+                      : ""
+                  }
+                </div>
+              </article>
+            `,
+          )
+          .join("")
+      : '<p class="empty-state">Approved member profiles will appear here soon.</p>';
+  };
+
+  (async () => {
+    try {
+      renderMembers(await eysApi("/api/members"));
+      if (status) status.hidden = true;
+    } catch (error) {
+      if (status) {
+        status.textContent = error.message;
+        status.dataset.state = "error";
+      }
+    }
+  })();
 }
 
 const blogApp = document.querySelector("[data-blog-app]");

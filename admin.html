@@ -17,7 +17,7 @@
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header" data-header>
+    <header class="site-header on-light-surface" data-header>
       <a class="brand" href="index.html#home" aria-label="Edo Youths Scotland home">
         <img class="brand-logo-rest" src="assets/eys-logo-white-transparent.png" alt="" aria-hidden="true" />
         <img class="brand-logo-scrolled" src="assets/eys-logo-dark-transparent.png" alt="" aria-hidden="true" />
@@ -33,7 +33,7 @@
         <a href="index.html#story">Story</a>
         <a href="index.html#promise">Promise</a>
         <a href="community.html">Community</a>
-        <a href="index.html#agency">Agency</a>
+        <a href="members.html">Members</a>
         <a href="events.html">Events</a>
         <a href="blog.html">Blog</a>
       </nav>
@@ -79,6 +79,7 @@
 
           <div class="admin-tabs" role="tablist" aria-label="Admin sections">
             <button class="is-active" type="button" data-admin-tab="requests">Join requests</button>
+            <button type="button" data-admin-tab="members">Members</button>
             <button type="button" data-admin-tab="blog">Blog posts</button>
           </div>
 
@@ -88,6 +89,64 @@
               <button class="button secondary" type="button" data-refresh-requests>Refresh</button>
             </div>
             <div class="admin-list" data-requests-list></div>
+          </section>
+
+          <section class="admin-panel" data-admin-panel="members">
+            <div class="admin-panel-heading">
+              <h2>Members</h2>
+              <button class="button secondary" type="button" data-refresh-members>Refresh</button>
+            </div>
+
+            <form class="admin-card admin-form member-editor" data-member-editor>
+              <input name="id" type="hidden" />
+              <label>
+                Name
+                <input name="name" type="text" required />
+              </label>
+              <label>
+                Role or contribution
+                <input name="role" type="text" placeholder="Member, mentor, volunteer, business owner" required />
+              </label>
+              <label>
+                Location
+                <input name="location" type="text" placeholder="Glasgow, Edinburgh, Aberdeen..." />
+              </label>
+              <label>
+                Bio
+                <textarea name="bio" rows="5" required></textarea>
+              </label>
+              <label>
+                Skills or interests
+                <input name="skills" type="text" placeholder="Mentoring, catering, photography" />
+              </label>
+              <label>
+                Business or project name
+                <input name="businessName" type="text" />
+              </label>
+              <label>
+                Website URL
+                <input name="websiteUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                Profile image URL
+                <input name="imageUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                Visibility
+                <select name="visibility">
+                  <option value="draft">Draft</option>
+                  <option value="public">Public</option>
+                  <option value="hidden">Hidden</option>
+                </select>
+              </label>
+              <div class="form-submit">
+                <button class="button primary" type="submit">Save member</button>
+                <button class="button secondary" type="button" data-clear-member-editor>Clear</button>
+              </div>
+              <p class="form-status" data-member-editor-status role="status"></p>
+            </form>
+
+            <div class="admin-list" data-members-list></div>
           </section>
 
           <section class="admin-panel" data-admin-panel="blog">

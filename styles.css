@@ -338,6 +338,51 @@ img {
   color: var(--orange);
 }
 
+.hero-cta {
+  width: min(680px, 100%);
+  margin: 26px auto 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.6;
+  text-wrap: balance;
+  text-shadow: 0 12px 32px rgba(0, 0, 0, 0.36);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.hero-actions .button {
+  min-width: 170px;
+}
+
+.hero-actions .button.primary {
+  background: var(--orange);
+  color: var(--white);
+  border-color: var(--orange);
+}
+
+.hero-actions .button.primary:hover {
+  background: #d94f15;
+  border-color: #d94f15;
+}
+
+.hero-actions .button.secondary {
+  background: var(--white);
+  color: var(--green);
+  border-color: var(--white);
+}
+
+.hero-actions .button.secondary:hover {
+  background: var(--gold-soft);
+  border-color: var(--gold-soft);
+}
+
 .intro-panel {
   width: min(1180px, calc(100% - 40px));
   display: grid;
@@ -1796,11 +1841,7 @@ img {
   }
 
   .tile-one {
-    width: 214px;
-    right: -54px;
-    top: 24%;
-    opacity: 0.78;
-    border-radius: 18px;
+    display: none;
   }
 
   .hero h1 {
@@ -1809,6 +1850,25 @@ img {
     margin-left: auto;
     font-size: clamp(46px, 14.5vw, 66px);
     line-height: 0.98;
+  }
+
+  .hero-cta {
+    max-width: 360px;
+    margin-top: 20px;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  .hero-actions {
+    width: min(360px, 100%);
+    margin-right: auto;
+    margin-left: auto;
+    gap: 10px;
+  }
+
+  .hero-actions .button {
+    width: 100%;
+    min-width: 0;
   }
 
   .journey,

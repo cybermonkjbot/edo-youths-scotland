@@ -108,80 +108,6 @@ window.addEventListener("hashchange", updateActiveNavItem);
 updateHeader();
 updateActiveNavItem();
 
-const carousel = document.querySelector("[data-service-carousel]");
-
-if (carousel) {
-  const track = carousel.querySelector("[data-service-track]");
-  const slides = Array.from(carousel.querySelectorAll("[data-service-slide]"));
-  const dots = carousel.querySelector("[data-carousel-dots]");
-  const previousButton = document.querySelector("[data-carousel-prev]");
-  const nextButton = document.querySelector("[data-carousel-next]");
-
-  const getActiveIndex = () => {
-    if (!track || slides.length === 0) return 0;
-
-    const trackLeft = track.getBoundingClientRect().left;
-    return slides.reduce((closestIndex, slide, index) => {
-      const currentDistance = Math.abs(slide.getBoundingClientRect().left - trackLeft);
-      const closestDistance = Math.abs(slides[closestIndex].getBoundingClientRect().left - trackLeft);
-      return currentDistance < closestDistance ? index : closestIndex;
-    }, 0);
-  };
-
-  const scrollToSlide = (index) => {
-    const target = slides[index];
-    if (!track || !target) return;
-
-    track.scrollTo({
-      left: target.offsetLeft - track.offsetLeft,
-      behavior: "smooth",
-    });
-  };
-
-  const updateCarousel = () => {
-    const activeIndex = getActiveIndex();
-
-    if (previousButton) {
-      previousButton.disabled = activeIndex === 0;
-    }
-
-    if (nextButton) {
-      nextButton.disabled = activeIndex === slides.length - 1;
-    }
-
-    if (dots) {
-      Array.from(dots.children).forEach((dot, index) => {
-        dot.classList.toggle("is-active", index === activeIndex);
-        dot.setAttribute("aria-current", index === activeIndex ? "true" : "false");
-      });
-    }
-  };
-
-  if (dots && slides.length > 0) {
-    slides.forEach((slide, index) => {
-      const dot = document.createElement("button");
-      const title = slide.querySelector("strong")?.textContent || `Service ${index + 1}`;
-
-      dot.type = "button";
-      dot.setAttribute("aria-label", `Show ${title}`);
-      dot.addEventListener("click", () => scrollToSlide(index));
-      dots.appendChild(dot);
-    });
-  }
-
-  previousButton?.addEventListener("click", () => {
-    scrollToSlide(Math.max(getActiveIndex() - 1, 0));
-  });
-
-  nextButton?.addEventListener("click", () => {
-    scrollToSlide(Math.min(getActiveIndex() + 1, slides.length - 1));
-  });
-
-  track?.addEventListener("scroll", () => window.requestAnimationFrame(updateCarousel), { passive: true });
-  window.addEventListener("resize", updateCarousel);
-  updateCarousel();
-}
-
 const siteVideos = Array.from(document.querySelectorAll("video"));
 
 const pauseOtherVideos = (activeVideo) => {
@@ -634,7 +560,7 @@ if (joinForm) {
 
       showQuestion(questions.length - 1, false);
     } catch (error) {
-      completeButton.textContent = "Complete request";
+      completeButton.textContent = "Send";
       completeButton.disabled = false;
 
       if (status) {

@@ -830,15 +830,13 @@ img {
   color: rgba(255, 255, 255, 0.72);
 }
 
-.promise-grid,
-.service-grid {
+.promise-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
 
-.promise-grid article,
-.service-grid article {
+.promise-grid article {
   min-height: 210px;
   padding: 28px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -847,15 +845,13 @@ img {
   transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
 }
 
-.promise-grid article:hover,
-.service-grid article:hover {
+.promise-grid article:hover {
   transform: translateY(-3px);
   border-color: rgba(255, 255, 255, 0.24);
   background: rgba(255, 255, 255, 0.12);
 }
 
-.promise-grid span,
-.service-grid strong {
+.promise-grid span {
   display: block;
   margin-bottom: 18px;
   color: var(--gold-soft);
@@ -863,8 +859,7 @@ img {
   font-weight: 900;
 }
 
-.promise-grid p,
-.service-grid p {
+.promise-grid p {
   margin: 0;
   color: rgba(255, 255, 255, 0.76);
   line-height: 1.65;
@@ -884,83 +879,31 @@ img {
   padding-bottom: 52px;
 }
 
-.services-header {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 26px;
+.services .section-heading {
+  margin: 0 0 38px;
 }
 
-.services-header .section-heading {
-  margin: 0;
-  text-align: left;
-}
-
-.carousel-controls {
-  display: inline-flex;
-  gap: 10px;
-}
-
-.carousel-button {
-  width: 48px;
-  height: 48px;
-  border: 1px solid rgba(16, 19, 29, 0.24);
-  border-radius: 999px;
-  background: var(--white);
-  color: var(--green);
-  font-size: 28px;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 10px 24px rgba(16, 19, 29, 0.08);
-  transition: transform 180ms ease, opacity 180ms ease, background 180ms ease;
-}
-
-.carousel-button:hover {
-  background: var(--gold-soft);
-  transform: translateY(-2px);
-}
-
-.carousel-button:disabled {
-  cursor: default;
-  opacity: 0.42;
-  transform: none;
-}
-
-.service-carousel {
+.services .service-grid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 
-.service-grid {
-  display: flex;
-  gap: 18px;
-  overflow-x: auto;
-  padding: 4px 4px 20px;
-  scroll-behavior: smooth;
-  scroll-padding-left: 4px;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.service-grid::-webkit-scrollbar {
-  display: none;
-}
-
-.service-grid article {
+.services .service-grid article {
   position: relative;
   isolation: isolate;
-  flex: 0 0 min(520px, calc(100vw - 72px));
-  min-height: 330px;
+  min-height: 290px;
   display: flex;
   flex-direction: column;
   justify-content: end;
   overflow: hidden;
-  scroll-snap-align: start;
+  padding: 32px;
+  border-radius: 8px;
   background: var(--ink);
+  box-shadow: 0 18px 42px rgba(9, 15, 18, 0.12);
 }
 
-.service-grid article::before {
+.services .service-grid article::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -972,7 +915,7 @@ img {
   transition: opacity 180ms ease, transform 220ms ease;
 }
 
-.service-grid article::after {
+.services .service-grid article::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -982,64 +925,49 @@ img {
     linear-gradient(110deg, rgba(5, 60, 42, 0.4), rgba(16, 19, 29, 0.72));
 }
 
-.service-grid article:nth-child(1)::before {
+.services .service-grid article:nth-child(1)::before {
   background-image: url("assets/Supplied/image-024.jpeg");
 }
 
-.service-grid article:nth-child(2)::before {
+.services .service-grid article:nth-child(2)::before {
   background-image: url("assets/Supplied/image-021.jpeg");
 }
 
-.service-grid article:nth-child(3)::before {
+.services .service-grid article:nth-child(3)::before {
   background-image: url("assets/Supplied/image-026.jpeg");
 }
 
-.service-grid article:nth-child(4)::before {
+.services .service-grid article:nth-child(4)::before {
   background-image: url("assets/Supplied/image-037.jpeg");
 }
 
-.service-grid article:hover {
+.services .service-grid article:hover {
   background: var(--ink);
 }
 
-.service-grid article:hover::before {
+.services .service-grid article:hover::before {
   opacity: 0.22;
   transform: scale(1.03);
 }
 
-.service-grid strong {
+.services .service-grid strong {
   position: relative;
   z-index: 1;
+  display: block;
+  margin-bottom: 18px;
+  color: var(--gold-soft);
   font-size: 28px;
+  font-weight: 900;
 }
 
-.service-grid p {
+.services .service-grid p {
   position: relative;
   z-index: 1;
+  margin: 0;
   max-width: 34ch;
+  color: rgba(255, 255, 255, 0.76);
   font-size: 18px;
-}
-
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 9px;
-}
-
-.carousel-dots button {
-  width: 9px;
-  height: 9px;
-  padding: 0;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(5, 60, 42, 0.22);
-  cursor: pointer;
-  transition: width 180ms ease, background 180ms ease;
-}
-
-.carousel-dots button.is-active {
-  width: 28px;
-  background: var(--green);
+  line-height: 1.65;
 }
 
 .split-section {
@@ -3076,17 +3004,7 @@ img {
     order: 1;
   }
 
-  .services-header {
-    align-items: flex-start;
-  }
-
-  .carousel-button {
-    width: 44px;
-    height: 44px;
-  }
-
-  .service-grid article {
-    flex-basis: calc(100vw - 52px);
+  .services .service-grid article {
     min-height: 300px;
     padding: 24px;
   }

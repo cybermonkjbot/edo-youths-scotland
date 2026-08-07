@@ -100,9 +100,13 @@
 
           <section class="profile-step flow-question" data-profile-step data-flow-question hidden>
             <label class="upload-box" for="profile-photo">
-              <span>Choose profile photo</span>
+              <span>Optional profile photo</span>
               <small data-photo-name>JPG, PNG or WebP</small>
               <input id="profile-photo" name="profilePhoto" type="file" accept="image/*" />
+            </label>
+            <label class="consent-checkbox">
+              <input id="join-consent" name="consent" type="checkbox" required />
+              <span>I agree that Edo Youths Scotland may store and use my contact details and optional photo to follow up on my request.</span>
             </label>
             <div class="flow-controls">
               <button class="flow-pill" type="button" data-flow-prev data-back-to-details>Back</button>

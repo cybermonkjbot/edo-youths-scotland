@@ -2010,6 +2010,17 @@ img {
   font-weight: 800;
 }
 
+.admin-actions-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.admin-actions-row .button {
+  width: 100%;
+}
+
 .status-pill {
   padding: 7px 10px;
   border-radius: 999px;

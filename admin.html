@@ -77,6 +77,7 @@
             <button type="button" data-admin-tab="blog">Blog posts</button>
             <button type="button" data-admin-tab="impact">Impact reports</button>
             <button type="button" data-admin-tab="governance">Governance</button>
+            <button type="button" data-admin-tab="partners">Partners</button>
           </div>
 
           <section class="admin-panel is-active" data-admin-panel="requests">
@@ -279,6 +280,52 @@
             </form>
 
             <div class="admin-list" data-governance-list></div>
+          </section>
+
+          <section class="admin-panel" data-admin-panel="partners">
+            <div class="admin-panel-heading">
+              <h2>Partners</h2>
+              <button class="button secondary" type="button" data-refresh-partners>Refresh</button>
+            </div>
+
+            <form class="admin-card admin-form partner-editor" data-partner-editor>
+              <input name="id" type="hidden" />
+              <label>
+                Name
+                <input name="name" type="text" required />
+              </label>
+              <label>
+                Description
+                <textarea name="description" rows="5" required></textarea>
+              </label>
+              <label>
+                Website URL
+                <input name="websiteUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                Logo URL
+                <input name="logoUrl" type="url" placeholder="https://..." />
+              </label>
+              <label>
+                Sort order
+                <input name="sortOrder" type="number" step="1" value="100" required />
+              </label>
+              <label>
+                Visibility
+                <select name="visibility" required>
+                  <option value="draft">Draft</option>
+                  <option value="public">Public</option>
+                  <option value="hidden">Hidden</option>
+                </select>
+              </label>
+              <div class="form-submit">
+                <button class="button primary" type="submit">Save partner</button>
+                <button class="button secondary" type="button" data-clear-partner-editor>Clear</button>
+              </div>
+              <p class="form-status" data-partner-editor-status role="status"></p>
+            </form>
+
+            <div class="admin-list" data-partners-list></div>
           </section>
         </section>
       </section>

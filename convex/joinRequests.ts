@@ -46,6 +46,8 @@ export const submit = mutationGeneric({
     profilePhotoName: optionalString,
     profilePhotoType: optionalString,
     profilePhotoSize: v.optional(v.number()),
+    profilePhotoData: optionalString,
+    consent: v.boolean(),
   },
   handler: async (ctx, args) => {
     const name = args.name.trim();
@@ -66,6 +68,8 @@ export const submit = mutationGeneric({
       profilePhotoName: clean(args.profilePhotoName),
       profilePhotoType: clean(args.profilePhotoType),
       profilePhotoSize: args.profilePhotoSize,
+      profilePhotoData: clean(args.profilePhotoData),
+      consent: args.consent,
       status: "new",
       createdAt: Date.now(),
     });

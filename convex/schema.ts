@@ -31,6 +31,8 @@ export default defineSchema({
     profilePhotoName: v.optional(v.string()),
     profilePhotoType: v.optional(v.string()),
     profilePhotoSize: v.optional(v.number()),
+    profilePhotoData: v.optional(v.string()),
+    consent: v.boolean(),
     status: v.union(v.literal("new"), v.literal("reviewed"), v.literal("archived")),
     createdAt: v.number(),
     reviewedAt: v.optional(v.number()),
@@ -91,6 +93,20 @@ export default defineSchema({
     role: v.string(),
     bio: v.string(),
     imageUrl: v.optional(v.string()),
+    sortOrder: v.number(),
+    visibility: v.union(v.literal("draft"), v.literal("public"), v.literal("hidden")),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    publishedAt: v.optional(v.number()),
+  })
+    .index("by_visibility_sort", ["visibility", "sortOrder"])
+    .index("by_created", ["createdAt"]),
+
+  partners: defineTable({
+    name: v.string(),
+    description: v.string(),
+    websiteUrl: v.optional(v.string()),
+    logoUrl: v.optional(v.string()),
     sortOrder: v.number(),
     visibility: v.union(v.literal("draft"), v.literal("public"), v.literal("hidden")),
     createdAt: v.number(),

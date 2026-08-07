@@ -18,6 +18,10 @@ const functions = {
   impactListForAdmin: makeFunctionReference<"query">("impactReports:listForAdmin"),
   impactListPublic: makeFunctionReference<"query">("impactReports:listPublic"),
   impactUpdate: makeFunctionReference<"mutation">("impactReports:update"),
+  partnersCreate: makeFunctionReference<"mutation">("partners:create"),
+  partnersListForAdmin: makeFunctionReference<"query">("partners:listForAdmin"),
+  partnersListPublic: makeFunctionReference<"query">("partners:listPublic"),
+  partnersUpdate: makeFunctionReference<"mutation">("partners:update"),
   joinListForAdmin: makeFunctionReference<"query">("joinRequests:listForAdmin"),
   joinSubmit: makeFunctionReference<"mutation">("joinRequests:submit"),
   joinUpdateStatus: makeFunctionReference<"mutation">("joinRequests:updateStatus"),
@@ -253,6 +257,19 @@ http.route({
 });
 
 http.route({
+  path: "/api/partners",
+  method: "GET",
+  handler: httpActionGeneric(async (ctx) => {
+    try {
+      const result = await ctx.runQuery(functions.partnersListPublic, {});
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
   path: "/api/admin/members",
   method: "GET",
   handler: httpActionGeneric(async (ctx, request) => {
@@ -406,6 +423,55 @@ http.route({
     try {
       const data = await body(request);
       const result = await ctx.runMutation(functions.governanceUpdate, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/partners",
+  method: "GET",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const result = await ctx.runQuery(functions.partnersListForAdmin, {
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error, 401);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/partners",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.partnersCreate, {
+        ...data,
+        sessionToken: sessionTokenFrom(request),
+      });
+      return json(result);
+    } catch (error) {
+      return errorResponse(error);
+    }
+  }),
+});
+
+http.route({
+  path: "/api/admin/partners/update",
+  method: "POST",
+  handler: httpActionGeneric(async (ctx, request) => {
+    try {
+      const data = await body(request);
+      const result = await ctx.runMutation(functions.partnersUpdate, {
         ...data,
         sessionToken: sessionTokenFrom(request),
       });

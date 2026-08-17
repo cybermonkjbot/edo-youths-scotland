@@ -1096,11 +1096,15 @@ if (adminApp) {
   const loadRequests = async () => {
     if (!requestsList) return;
     requestsList.innerHTML = renderListSkeleton();
+    if (overviewRequestsList) {
+      overviewRequestsList.innerHTML = renderOverviewSkeleton();
+    }
 
     try {
       rawRequests = await eysApi("/api/admin/join-requests", { token: token() });
       updateBadgesAndOverview();
       renderFilteredRequests();
+      return true;
     } catch (error) {
       requestsList.innerHTML = renderStateCard({
         kind: "error",
@@ -1108,6 +1112,7 @@ if (adminApp) {
         message: error.message,
         illustration: stateIllustrations.error,
       });
+      return false;
     }
   };
 
@@ -1143,9 +1148,8 @@ if (adminApp) {
       return;
     }
 
-    requestsList.innerHTML = filtered.length
-      ? filtered
-          .map(
+    requestsList.innerHTML = filtered
+      .map(
             (request) => `
               <article class="admin-item">
                 <div>
@@ -1167,7 +1171,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("");
+      .join("");
 
     requestsList.querySelectorAll("[data-promote-request]").forEach((button) => {
       button.addEventListener("click", async () => {
@@ -1239,6 +1243,7 @@ if (adminApp) {
       rawMembers = await eysApi("/api/admin/members", { token: token() });
       updateBadgesAndOverview();
       renderFilteredMembers();
+      return true;
     } catch (error) {
       membersList.innerHTML = renderStateCard({
         kind: "error",
@@ -1246,6 +1251,7 @@ if (adminApp) {
         message: error.message,
         illustration: stateIllustrations.error,
       });
+      return false;
     }
   };
 
@@ -1281,9 +1287,8 @@ if (adminApp) {
       return;
     }
 
-    membersList.innerHTML = filtered.length
-      ? filtered
-          .map(
+    membersList.innerHTML = filtered
+      .map(
             (member) => `
               <article class="admin-item">
                 <div class="admin-item-content">
@@ -1308,7 +1313,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("");
+      .join("");
 
     membersList.querySelectorAll("[data-edit-member]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1321,11 +1326,15 @@ if (adminApp) {
   const loadPosts = async () => {
     if (!postsList) return;
     postsList.innerHTML = renderListSkeleton();
+    if (overviewBlogList) {
+      overviewBlogList.innerHTML = renderOverviewSkeleton();
+    }
 
     try {
       rawPosts = await eysApi("/api/admin/blog-posts", { token: token() });
       updateBadgesAndOverview();
       renderFilteredPosts();
+      return true;
     } catch (error) {
       postsList.innerHTML = renderStateCard({
         kind: "error",
@@ -1333,6 +1342,7 @@ if (adminApp) {
         message: error.message,
         illustration: stateIllustrations.error,
       });
+      return false;
     }
   };
 
@@ -1367,9 +1377,8 @@ if (adminApp) {
       return;
     }
 
-    postsList.innerHTML = filtered.length
-      ? filtered
-          .map(
+    postsList.innerHTML = filtered
+      .map(
             (post) => `
               <article class="admin-item">
                 <div class="admin-item-content">
@@ -1388,7 +1397,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("");
+      .join("");
 
     postsList.querySelectorAll("[data-edit-post]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1441,6 +1450,7 @@ if (adminApp) {
       rawImpact = await eysApi("/api/admin/impact-reports", { token: token() });
       updateBadgesAndOverview();
       renderFilteredImpactReports();
+      return true;
     } catch (error) {
       impactReportsList.innerHTML = renderStateCard({
         kind: "error",
@@ -1448,6 +1458,7 @@ if (adminApp) {
         message: error.message,
         illustration: stateIllustrations.error,
       });
+      return false;
     }
   };
 
@@ -1482,9 +1493,8 @@ if (adminApp) {
       return;
     }
 
-    impactReportsList.innerHTML = filtered.length
-      ? filtered
-          .map(
+    impactReportsList.innerHTML = filtered
+      .map(
             (report) => `
               <article class="admin-item">
                 <div>
@@ -1505,7 +1515,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("");
+      .join("");
 
     impactReportsList.querySelectorAll("[data-edit-impact-report]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1548,6 +1558,7 @@ if (adminApp) {
       rawGovernance = await eysApi("/api/admin/governance-profiles", { token: token() });
       updateBadgesAndOverview();
       renderFilteredGovernance();
+      return true;
     } catch (error) {
       governanceList.innerHTML = renderStateCard({
         kind: "error",
@@ -1555,6 +1566,7 @@ if (adminApp) {
         message: error.message,
         illustration: stateIllustrations.error,
       });
+      return false;
     }
   };
 
@@ -1589,9 +1601,8 @@ if (adminApp) {
       return;
     }
 
-    governanceList.innerHTML = filtered.length
-      ? filtered
-          .map(
+    governanceList.innerHTML = filtered
+      .map(
             (profile) => `
               <article class="admin-item">
                 <div class="admin-item-content">
@@ -1611,7 +1622,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("");
+      .join("");
 
     governanceList.querySelectorAll("[data-edit-governance]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1654,6 +1665,7 @@ if (adminApp) {
       rawPartners = await eysApi("/api/admin/partners", { token: token() });
       updateBadgesAndOverview();
       renderFilteredPartners();
+      return true;
     } catch (error) {
       partnersList.innerHTML = renderStateCard({
         kind: "error",
@@ -1661,6 +1673,7 @@ if (adminApp) {
         message: error.message,
         illustration: stateIllustrations.error,
       });
+      return false;
     }
   };
 
@@ -1695,9 +1708,8 @@ if (adminApp) {
       return;
     }
 
-    partnersList.innerHTML = filtered.length
-      ? filtered
-          .map(
+    partnersList.innerHTML = filtered
+      .map(
             (partner) => `
               <article class="admin-item">
                 <div class="admin-item-content">
@@ -1716,7 +1728,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("");
+      .join("");
 
     partnersList.querySelectorAll("[data-edit-partner]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1727,11 +1739,15 @@ if (adminApp) {
   };
 
   // CSV Export Helper for Join Requests
-  const exportRequestsToCsv = () => {
+  const exportRequestsToCsv = async (button) => {
+    const resetButton = setButtonLoading(button, "Exporting...");
     if (!rawRequests.length) {
+      resetButton();
       showToast("No join requests available to export.", "info");
       return;
     }
+
+    await Promise.resolve();
 
     const headers = ["Name", "Email", "Phone", "Interest", "Location", "Message", "Status", "Date"];
     const rows = rawRequests.map((r) => [
@@ -1754,10 +1770,13 @@ if (adminApp) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    resetButton();
     showToast("Join requests exported to CSV successfully!", "success");
   };
 
-  adminApp.querySelector("[data-export-requests]")?.addEventListener("click", exportRequestsToCsv);
+  adminApp.querySelector("[data-export-requests]")?.addEventListener("click", (event) => {
+    exportRequestsToCsv(event.currentTarget);
+  });
 
   // Search Bar Listener
   if (searchInput) {
@@ -1930,9 +1949,11 @@ if (adminApp) {
 
   adminApp.querySelectorAll("[data-admin-logout]").forEach((btn) => {
     btn.addEventListener("click", async () => {
+      const resetButton = setButtonLoading(btn, "Signing out...");
       try {
         await eysApi("/api/admin/logout", { method: "POST", token: token() });
       } finally {
+        resetButton();
         setSignedOut();
         showToast("Signed out successfully", "info");
       }
@@ -1968,39 +1989,39 @@ if (adminApp) {
 
   adminApp.querySelector("[data-refresh-requests]")?.addEventListener("click", async (event) => {
     const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
-    await loadRequests();
+    const ok = await loadRequests();
     resetButton();
-    showToast("Refreshed join requests", "info");
+    showToast(ok ? "Refreshed join requests" : "Could not refresh join requests", ok ? "info" : "error");
   });
   adminApp.querySelector("[data-refresh-members]")?.addEventListener("click", async (event) => {
     const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
-    await loadMembers();
+    const ok = await loadMembers();
     resetButton();
-    showToast("Refreshed members directory", "info");
+    showToast(ok ? "Refreshed members directory" : "Could not refresh members directory", ok ? "info" : "error");
   });
   adminApp.querySelector("[data-refresh-posts]")?.addEventListener("click", async (event) => {
     const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
-    await loadPosts();
+    const ok = await loadPosts();
     resetButton();
-    showToast("Refreshed blog posts", "info");
+    showToast(ok ? "Refreshed blog posts" : "Could not refresh blog posts", ok ? "info" : "error");
   });
   adminApp.querySelector("[data-refresh-impact-reports]")?.addEventListener("click", async (event) => {
     const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
-    await loadImpactReports();
+    const ok = await loadImpactReports();
     resetButton();
-    showToast("Refreshed impact reports", "info");
+    showToast(ok ? "Refreshed impact reports" : "Could not refresh impact reports", ok ? "info" : "error");
   });
   adminApp.querySelector("[data-refresh-governance]")?.addEventListener("click", async (event) => {
     const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
-    await loadGovernanceProfiles();
+    const ok = await loadGovernanceProfiles();
     resetButton();
-    showToast("Refreshed governance profiles", "info");
+    showToast(ok ? "Refreshed governance profiles" : "Could not refresh governance profiles", ok ? "info" : "error");
   });
   adminApp.querySelector("[data-refresh-partners]")?.addEventListener("click", async (event) => {
     const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
-    await loadPartners();
+    const ok = await loadPartners();
     resetButton();
-    showToast("Refreshed partners", "info");
+    showToast(ok ? "Refreshed partners" : "Could not refresh partners", ok ? "info" : "error");
   });
 
   adminApp.querySelector("[data-clear-member-editor]")?.addEventListener("click", () => {

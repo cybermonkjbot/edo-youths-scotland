@@ -582,6 +582,27 @@ img {
   box-shadow: 0 8px 22px rgba(5, 60, 42, 0.12);
 }
 
+.button.is-loading {
+  pointer-events: none;
+  opacity: 0.88;
+}
+
+.button.is-loading::after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: buttonSpin 0.8s linear infinite;
+}
+
+@keyframes buttonSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .nav-toggle {
   display: none;
   width: 48px;
@@ -2769,6 +2790,98 @@ body.admin-body {
   border: 1px dashed var(--admin-border);
   border-radius: 12px;
   background: #fbf9f4;
+}
+
+.admin-state {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 28px 20px;
+  border: 1px dashed var(--admin-border);
+  border-radius: 12px;
+  background: #fbf9f4;
+}
+
+.admin-state-illustration {
+  width: min(220px, 100%);
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+.admin-state-title {
+  margin: 2px 0 0;
+  color: var(--green);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.admin-state-message {
+  margin: 0;
+  max-width: 56ch;
+  color: var(--admin-text-muted);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.admin-state-error {
+  border-color: rgba(220, 38, 38, 0.28);
+  background: rgba(220, 38, 38, 0.04);
+}
+
+.admin-state-error .admin-state-title {
+  color: #b91c1c;
+}
+
+.admin-item-skeleton {
+  pointer-events: none;
+}
+
+.admin-item-skeleton .skeleton-block {
+  display: block;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ece9df 0%, #f8f5eb 45%, #ece9df 100%);
+  background-size: 220px 100%;
+  animation: adminShimmer 1.35s linear infinite;
+}
+
+.skeleton-title {
+  width: min(220px, 70%);
+  height: 16px;
+}
+
+.skeleton-line {
+  margin-top: 10px;
+  width: min(500px, 90%);
+  height: 11px;
+}
+
+.skeleton-line.short {
+  width: min(320px, 66%);
+}
+
+.skeleton-pill {
+  width: 84px;
+  height: 24px;
+  border-radius: 999px;
+}
+
+.skeleton-time {
+  width: 100px;
+  height: 11px;
+}
+
+.skeleton-action {
+  width: 120px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+@keyframes adminShimmer {
+  to {
+    background-position: 220px 0;
+  }
 }
 
 /* --- Slide-Over Editor Drawer Modal --- */

@@ -728,6 +728,77 @@ if (adminApp) {
     node.dataset.state = state;
   };
 
+  const stateIllustrations = {
+    empty: "https://undraw.co/illustrations/undraw_no_data_re_kwbl.svg",
+    search: "https://undraw.co/illustrations/undraw_file_searching_re_3evy.svg",
+    error: "https://undraw.co/illustrations/undraw_server_down_s4lk.svg",
+  };
+
+  const setButtonLoading = (button, loadingText = "Loading...") => {
+    if (!button) return () => {};
+    const originalText = button.textContent;
+    const hadDisabled = button.disabled;
+    button.disabled = true;
+    button.classList.add("is-loading");
+    button.textContent = loadingText;
+    return () => {
+      button.textContent = originalText;
+      button.disabled = hadDisabled;
+      button.classList.remove("is-loading");
+    };
+  };
+
+  const renderStateCard = ({
+    title,
+    message,
+    illustration,
+    kind = "empty",
+  }) => `
+    <div class="admin-state admin-state-${escapeHtml(kind)}">
+      ${illustration ? `<img class="admin-state-illustration" src="${escapeHtml(illustration)}" alt="" loading="lazy" />` : ""}
+      <h3 class="admin-state-title">${escapeHtml(title)}</h3>
+      <p class="admin-state-message">${escapeHtml(message)}</p>
+    </div>
+  `;
+
+  const renderListSkeleton = (rows = 4) => `
+    <div class="admin-skeleton-list" aria-hidden="true">
+      ${Array.from({ length: rows })
+        .map(
+          () => `
+            <article class="admin-item admin-item-skeleton">
+              <div>
+                <span class="skeleton-block skeleton-title"></span>
+                <span class="skeleton-block skeleton-line"></span>
+                <span class="skeleton-block skeleton-line short"></span>
+              </div>
+              <div class="admin-item-meta">
+                <span class="skeleton-block skeleton-pill"></span>
+                <span class="skeleton-block skeleton-time"></span>
+                <span class="skeleton-block skeleton-action"></span>
+              </div>
+            </article>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+
+  const renderOverviewSkeleton = (rows = 3) =>
+    Array.from({ length: rows })
+      .map(
+        () => `
+          <div class="admin-item admin-item-skeleton" style="padding: 14px;">
+            <div>
+              <span class="skeleton-block skeleton-title"></span>
+              <span class="skeleton-block skeleton-line short"></span>
+            </div>
+            <span class="skeleton-block skeleton-pill"></span>
+          </div>
+        `,
+      )
+      .join("");
+
   const showToast = (message, type = "info") => {
     if (!toastContainer) return;
     const toast = document.createElement("div");
@@ -855,6 +926,13 @@ if (adminApp) {
 
   setupFileUploadZones();
 
+  if (overviewRequestsList) {
+    overviewRequestsList.innerHTML = renderOverviewSkeleton();
+  }
+  if (overviewBlogList) {
+    overviewBlogList.innerHTML = renderOverviewSkeleton();
+  }
+
   const resetFormUploadZones = (form) => {
     if (!form) return;
     form.querySelectorAll(".file-upload-zone").forEach((zone) => {
@@ -965,7 +1043,11 @@ if (adminApp) {
               `,
             )
             .join("")
-        : '<p class="empty-state">No join requests yet.</p>';
+        : renderStateCard({
+            title: "No join requests yet",
+            message: "New applications will appear here as people submit the join form.",
+            illustration: stateIllustrations.empty,
+          });
     }
 
     if (overviewBlogList) {
@@ -984,15 +1066,17 @@ if (adminApp) {
               `,
             )
             .join("")
-        : '<p class="empty-state">No blog posts created yet.</p>';
+        : renderStateCard({
+            title: "No blog posts yet",
+            message: "Published and draft posts will appear here once your team starts writing.",
+            illustration: stateIllustrations.empty,
+          });
     }
   };
 
   const updateRequestStatus = async (id, status, button) => {
     if (!button) return;
-    const oldText = button.textContent;
-    button.textContent = "Updating...";
-    button.disabled = true;
+    const resetButton = setButtonLoading(button, "Updating...");
 
     try {
       await eysApi("/api/admin/join-requests/status", {
@@ -1004,21 +1088,26 @@ if (adminApp) {
       await loadRequests();
     } catch (error) {
       showToast(error.message, "error");
-      button.textContent = oldText;
-      button.disabled = false;
+    } finally {
+      resetButton();
     }
   };
 
   const loadRequests = async () => {
     if (!requestsList) return;
-    requestsList.innerHTML = '<p class="empty-state">Loading join requests...</p>';
+    requestsList.innerHTML = renderListSkeleton();
 
     try {
       rawRequests = await eysApi("/api/admin/join-requests", { token: token() });
       updateBadgesAndOverview();
       renderFilteredRequests();
     } catch (error) {
-      requestsList.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
+      requestsList.innerHTML = renderStateCard({
+        kind: "error",
+        title: "Could not load join requests",
+        message: error.message,
+        illustration: stateIllustrations.error,
+      });
     }
   };
 
@@ -1034,6 +1123,25 @@ if (adminApp) {
         r.interest.toLowerCase().includes(activeSearchTerm);
       return matchesStatus && matchesSearch;
     });
+
+    if (!rawRequests.length) {
+      requestsList.innerHTML = renderStateCard({
+        title: "No join requests yet",
+        message: "Applications from prospective members and volunteers will appear here.",
+        illustration: stateIllustrations.empty,
+      });
+      return;
+    }
+
+    if (!filtered.length) {
+      requestsList.innerHTML = renderStateCard({
+        kind: "search",
+        title: "No matching join requests",
+        message: "Try another search term or clear filters to see all requests.",
+        illustration: stateIllustrations.search,
+      });
+      return;
+    }
 
     requestsList.innerHTML = filtered.length
       ? filtered
@@ -1059,13 +1167,11 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("")
-      : '<p class="empty-state">No matching join requests found.</p>';
+          .join("");
 
     requestsList.querySelectorAll("[data-promote-request]").forEach((button) => {
       button.addEventListener("click", async () => {
-        button.textContent = "Creating...";
-        button.disabled = true;
+        const resetButton = setButtonLoading(button, "Creating...");
 
         try {
           await eysApi("/api/admin/members/from-request", {
@@ -1080,8 +1186,8 @@ if (adminApp) {
           await Promise.all([loadRequests(), loadMembers()]);
         } catch (error) {
           showToast(error.message, "error");
-          button.textContent = "Make member";
-          button.disabled = false;
+        } finally {
+          resetButton();
         }
       });
     });
@@ -1127,14 +1233,19 @@ if (adminApp) {
 
   const loadMembers = async () => {
     if (!membersList) return;
-    membersList.innerHTML = '<p class="empty-state">Loading members...</p>';
+    membersList.innerHTML = renderListSkeleton();
 
     try {
       rawMembers = await eysApi("/api/admin/members", { token: token() });
       updateBadgesAndOverview();
       renderFilteredMembers();
     } catch (error) {
-      membersList.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
+      membersList.innerHTML = renderStateCard({
+        kind: "error",
+        title: "Could not load members",
+        message: error.message,
+        illustration: stateIllustrations.error,
+      });
     }
   };
 
@@ -1150,6 +1261,25 @@ if (adminApp) {
         (m.location && m.location.toLowerCase().includes(activeSearchTerm));
       return matchesStatus && matchesSearch;
     });
+
+    if (!rawMembers.length) {
+      membersList.innerHTML = renderStateCard({
+        title: "No members yet",
+        message: "Member profiles created from join requests will appear here.",
+        illustration: stateIllustrations.empty,
+      });
+      return;
+    }
+
+    if (!filtered.length) {
+      membersList.innerHTML = renderStateCard({
+        kind: "search",
+        title: "No matching members",
+        message: "Try a broader search or switch filters to find profiles.",
+        illustration: stateIllustrations.search,
+      });
+      return;
+    }
 
     membersList.innerHTML = filtered.length
       ? filtered
@@ -1178,8 +1308,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("")
-      : '<p class="empty-state">No matching member profiles found.</p>';
+          .join("");
 
     membersList.querySelectorAll("[data-edit-member]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1191,14 +1320,19 @@ if (adminApp) {
 
   const loadPosts = async () => {
     if (!postsList) return;
-    postsList.innerHTML = '<p class="empty-state">Loading blog posts...</p>';
+    postsList.innerHTML = renderListSkeleton();
 
     try {
       rawPosts = await eysApi("/api/admin/blog-posts", { token: token() });
       updateBadgesAndOverview();
       renderFilteredPosts();
     } catch (error) {
-      postsList.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
+      postsList.innerHTML = renderStateCard({
+        kind: "error",
+        title: "Could not load blog posts",
+        message: error.message,
+        illustration: stateIllustrations.error,
+      });
     }
   };
 
@@ -1213,6 +1347,25 @@ if (adminApp) {
         p.excerpt.toLowerCase().includes(activeSearchTerm);
       return matchesStatus && matchesSearch;
     });
+
+    if (!rawPosts.length) {
+      postsList.innerHTML = renderStateCard({
+        title: "No blog posts yet",
+        message: "Create your first update to share progress with the community.",
+        illustration: stateIllustrations.empty,
+      });
+      return;
+    }
+
+    if (!filtered.length) {
+      postsList.innerHTML = renderStateCard({
+        kind: "search",
+        title: "No matching blog posts",
+        message: "Try another keyword or clear filters to browse all posts.",
+        illustration: stateIllustrations.search,
+      });
+      return;
+    }
 
     postsList.innerHTML = filtered.length
       ? filtered
@@ -1235,8 +1388,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("")
-      : '<p class="empty-state">No matching blog posts found.</p>';
+          .join("");
 
     postsList.querySelectorAll("[data-edit-post]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1283,14 +1435,19 @@ if (adminApp) {
 
   const loadImpactReports = async () => {
     if (!impactReportsList) return;
-    impactReportsList.innerHTML = '<p class="empty-state">Loading impact reports...</p>';
+    impactReportsList.innerHTML = renderListSkeleton();
 
     try {
       rawImpact = await eysApi("/api/admin/impact-reports", { token: token() });
       updateBadgesAndOverview();
       renderFilteredImpactReports();
     } catch (error) {
-      impactReportsList.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
+      impactReportsList.innerHTML = renderStateCard({
+        kind: "error",
+        title: "Could not load impact reports",
+        message: error.message,
+        illustration: stateIllustrations.error,
+      });
     }
   };
 
@@ -1305,6 +1462,25 @@ if (adminApp) {
         r.period.toLowerCase().includes(activeSearchTerm);
       return matchesStatus && matchesSearch;
     });
+
+    if (!rawImpact.length) {
+      impactReportsList.innerHTML = renderStateCard({
+        title: "No impact reports yet",
+        message: "Published impact reports will appear here once created.",
+        illustration: stateIllustrations.empty,
+      });
+      return;
+    }
+
+    if (!filtered.length) {
+      impactReportsList.innerHTML = renderStateCard({
+        kind: "search",
+        title: "No matching impact reports",
+        message: "Adjust your filters or search term to find reports.",
+        illustration: stateIllustrations.search,
+      });
+      return;
+    }
 
     impactReportsList.innerHTML = filtered.length
       ? filtered
@@ -1329,8 +1505,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("")
-      : '<p class="empty-state">No matching impact reports found.</p>';
+          .join("");
 
     impactReportsList.querySelectorAll("[data-edit-impact-report]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1367,14 +1542,19 @@ if (adminApp) {
 
   const loadGovernanceProfiles = async () => {
     if (!governanceList) return;
-    governanceList.innerHTML = '<p class="empty-state">Loading governance profiles...</p>';
+    governanceList.innerHTML = renderListSkeleton();
 
     try {
       rawGovernance = await eysApi("/api/admin/governance-profiles", { token: token() });
       updateBadgesAndOverview();
       renderFilteredGovernance();
     } catch (error) {
-      governanceList.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
+      governanceList.innerHTML = renderStateCard({
+        kind: "error",
+        title: "Could not load governance profiles",
+        message: error.message,
+        illustration: stateIllustrations.error,
+      });
     }
   };
 
@@ -1389,6 +1569,25 @@ if (adminApp) {
         p.role.toLowerCase().includes(activeSearchTerm);
       return matchesStatus && matchesSearch;
     });
+
+    if (!rawGovernance.length) {
+      governanceList.innerHTML = renderStateCard({
+        title: "No governance profiles yet",
+        message: "Add board, adviser, or leadership profiles to populate this section.",
+        illustration: stateIllustrations.empty,
+      });
+      return;
+    }
+
+    if (!filtered.length) {
+      governanceList.innerHTML = renderStateCard({
+        kind: "search",
+        title: "No matching governance profiles",
+        message: "Try another role keyword or clear your current filters.",
+        illustration: stateIllustrations.search,
+      });
+      return;
+    }
 
     governanceList.innerHTML = filtered.length
       ? filtered
@@ -1412,8 +1611,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("")
-      : '<p class="empty-state">No matching governance profiles found.</p>';
+          .join("");
 
     governanceList.querySelectorAll("[data-edit-governance]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1450,14 +1648,19 @@ if (adminApp) {
 
   const loadPartners = async () => {
     if (!partnersList) return;
-    partnersList.innerHTML = '<p class="empty-state">Loading partners...</p>';
+    partnersList.innerHTML = renderListSkeleton();
 
     try {
       rawPartners = await eysApi("/api/admin/partners", { token: token() });
       updateBadgesAndOverview();
       renderFilteredPartners();
     } catch (error) {
-      partnersList.innerHTML = `<p class="empty-state">${escapeHtml(error.message)}</p>`;
+      partnersList.innerHTML = renderStateCard({
+        kind: "error",
+        title: "Could not load partners",
+        message: error.message,
+        illustration: stateIllustrations.error,
+      });
     }
   };
 
@@ -1472,6 +1675,25 @@ if (adminApp) {
         pt.description.toLowerCase().includes(activeSearchTerm);
       return matchesStatus && matchesSearch;
     });
+
+    if (!rawPartners.length) {
+      partnersList.innerHTML = renderStateCard({
+        title: "No partners yet",
+        message: "Partner and sponsor entries will show here once added.",
+        illustration: stateIllustrations.empty,
+      });
+      return;
+    }
+
+    if (!filtered.length) {
+      partnersList.innerHTML = renderStateCard({
+        kind: "search",
+        title: "No matching partners",
+        message: "Try a different keyword or reset filters to see all partners.",
+        illustration: stateIllustrations.search,
+      });
+      return;
+    }
 
     partnersList.innerHTML = filtered.length
       ? filtered
@@ -1494,8 +1716,7 @@ if (adminApp) {
               </article>
             `,
           )
-          .join("")
-      : '<p class="empty-state">No matching partners found.</p>';
+          .join("");
 
     partnersList.querySelectorAll("[data-edit-partner]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -1652,6 +1873,10 @@ if (adminApp) {
       return;
     }
 
+    const submitButton =
+      event?.submitter ||
+      (event?.currentTarget instanceof HTMLButtonElement ? event.currentTarget : loginForm?.querySelector('[type="submit"]'));
+    const resetSubmitButton = setButtonLoading(submitButton, "Signing in...");
     setStatus(loginStatus, "Signing in...");
 
     let result = null;
@@ -1666,6 +1891,8 @@ if (adminApp) {
         token: "admin_token_" + Date.now(),
         admin: { email: email, name: email.split("@")[0] || "Admin" },
       };
+    } finally {
+      resetSubmitButton();
     }
 
     if (result) {
@@ -1739,28 +1966,40 @@ if (adminApp) {
     });
   });
 
-  adminApp.querySelector("[data-refresh-requests]")?.addEventListener("click", () => {
-    loadRequests();
+  adminApp.querySelector("[data-refresh-requests]")?.addEventListener("click", async (event) => {
+    const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
+    await loadRequests();
+    resetButton();
     showToast("Refreshed join requests", "info");
   });
-  adminApp.querySelector("[data-refresh-members]")?.addEventListener("click", () => {
-    loadMembers();
+  adminApp.querySelector("[data-refresh-members]")?.addEventListener("click", async (event) => {
+    const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
+    await loadMembers();
+    resetButton();
     showToast("Refreshed members directory", "info");
   });
-  adminApp.querySelector("[data-refresh-posts]")?.addEventListener("click", () => {
-    loadPosts();
+  adminApp.querySelector("[data-refresh-posts]")?.addEventListener("click", async (event) => {
+    const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
+    await loadPosts();
+    resetButton();
     showToast("Refreshed blog posts", "info");
   });
-  adminApp.querySelector("[data-refresh-impact-reports]")?.addEventListener("click", () => {
-    loadImpactReports();
+  adminApp.querySelector("[data-refresh-impact-reports]")?.addEventListener("click", async (event) => {
+    const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
+    await loadImpactReports();
+    resetButton();
     showToast("Refreshed impact reports", "info");
   });
-  adminApp.querySelector("[data-refresh-governance]")?.addEventListener("click", () => {
-    loadGovernanceProfiles();
+  adminApp.querySelector("[data-refresh-governance]")?.addEventListener("click", async (event) => {
+    const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
+    await loadGovernanceProfiles();
+    resetButton();
     showToast("Refreshed governance profiles", "info");
   });
-  adminApp.querySelector("[data-refresh-partners]")?.addEventListener("click", () => {
-    loadPartners();
+  adminApp.querySelector("[data-refresh-partners]")?.addEventListener("click", async (event) => {
+    const resetButton = setButtonLoading(event.currentTarget, "Refreshing...");
+    await loadPartners();
+    resetButton();
     showToast("Refreshed partners", "info");
   });
 
@@ -1802,6 +2041,7 @@ if (adminApp) {
 
   partnerEditor?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const resetSubmitButton = setButtonLoading(event.submitter || partnerEditor.querySelector('[type="submit"]'), "Saving...");
     setStatus(partnerEditorStatus, "Saving...");
     const formData = new FormData(partnerEditor);
     const id = formData.get("id");
@@ -1821,11 +2061,14 @@ if (adminApp) {
     } catch (error) {
       setStatus(partnerEditorStatus, error.message, "error");
       showToast(error.message, "error");
+    } finally {
+      resetSubmitButton();
     }
   });
 
   memberEditor?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const resetSubmitButton = setButtonLoading(event.submitter || memberEditor.querySelector('[type="submit"]'), "Saving...");
     setStatus(memberEditorStatus, "Saving...");
     const formData = new FormData(memberEditor);
     const id = formData.get("id");
@@ -1845,11 +2088,14 @@ if (adminApp) {
     } catch (error) {
       setStatus(memberEditorStatus, error.message, "error");
       showToast(error.message, "error");
+    } finally {
+      resetSubmitButton();
     }
   });
 
   editor?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const resetSubmitButton = setButtonLoading(event.submitter || editor.querySelector('[type="submit"]'), "Saving...");
     setStatus(editorStatus, "Saving...");
     const formData = new FormData(editor);
     const id = formData.get("id");
@@ -1876,11 +2122,14 @@ if (adminApp) {
     } catch (error) {
       setStatus(editorStatus, error.message, "error");
       showToast(error.message, "error");
+    } finally {
+      resetSubmitButton();
     }
   });
 
   impactEditor?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const resetSubmitButton = setButtonLoading(event.submitter || impactEditor.querySelector('[type="submit"]'), "Saving...");
     setStatus(impactEditorStatus, "Saving...");
     const formData = new FormData(impactEditor);
     const id = formData.get("id");
@@ -1901,11 +2150,14 @@ if (adminApp) {
     } catch (error) {
       setStatus(impactEditorStatus, error.message, "error");
       showToast(error.message, "error");
+    } finally {
+      resetSubmitButton();
     }
   });
 
   governanceEditor?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    const resetSubmitButton = setButtonLoading(event.submitter || governanceEditor.querySelector('[type="submit"]'), "Saving...");
     setStatus(governanceEditorStatus, "Saving...");
     const formData = new FormData(governanceEditor);
     const id = formData.get("id");
@@ -1926,6 +2178,8 @@ if (adminApp) {
     } catch (error) {
       setStatus(governanceEditorStatus, error.message, "error");
       showToast(error.message, "error");
+    } finally {
+      resetSubmitButton();
     }
   });
 

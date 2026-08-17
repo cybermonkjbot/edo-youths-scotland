@@ -511,6 +511,74 @@ if (joinForm) {
       reader.readAsDataURL(file);
     });
 
+  const optimizeProfilePhoto = async (file) => {
+    if (!file) return { dataUrl: undefined, type: undefined, size: undefined };
+
+    if (file.type === "image/svg+xml") {
+      const dataUrl = await readFileAsDataUrl(file);
+      return { dataUrl, type: file.type, size: file.size };
+    }
+
+    const image = await new Promise((resolve, reject) => {
+      const objectUrl = URL.createObjectURL(file);
+      const img = new Image();
+
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        resolve(img);
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error("The selected photo could not be processed."));
+      };
+
+      img.src = objectUrl;
+    });
+
+    const maxDimension = 1200;
+    const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth || 1, image.naturalHeight || 1));
+    const width = Math.max(1, Math.round((image.naturalWidth || 1) * scale));
+    const height = Math.max(1, Math.round((image.naturalHeight || 1) * scale));
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    if (!context) {
+      const dataUrl = await readFileAsDataUrl(file);
+      return { dataUrl, type: file.type, size: file.size };
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, width, height);
+    context.drawImage(image, 0, 0, width, height);
+
+    const mimeType = file.type === "image/png" || file.type === "image/webp" ? "image/jpeg" : file.type;
+    const targetSize = 220000;
+    let quality = 0.82;
+
+    const toBlobWithQuality = (value) =>
+      new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), mimeType, value);
+      });
+
+    let blob = await toBlobWithQuality(quality);
+
+    while (blob && blob.size > targetSize && quality > 0.45) {
+      quality -= 0.08;
+      blob = await toBlobWithQuality(quality);
+    }
+
+    if (!blob) {
+      const dataUrl = await readFileAsDataUrl(file);
+      return { dataUrl, type: file.type, size: file.size };
+    }
+
+    const dataUrl = canvas.toDataURL(mimeType, quality);
+    return { dataUrl, type: mimeType, size: blob.size };
+  };
+
   photoInput?.addEventListener("change", () => {
     const file = photoInput.files?.[0];
 
@@ -537,7 +605,7 @@ if (joinForm) {
     }
 
     try {
-      const profilePhotoData = file && file.size <= 512000 ? await readFileAsDataUrl(file) : undefined;
+      const optimizedPhoto = file ? await optimizeProfilePhoto(file) : { dataUrl: undefined, type: undefined, size: undefined };
 
       await eysApi("/api/join", {
         method: "POST",
@@ -549,9 +617,9 @@ if (joinForm) {
           location: formData.get("location"),
           message: formData.get("message"),
           profilePhotoName: file?.name,
-          profilePhotoType: file?.type,
-          profilePhotoSize: file?.size,
-          profilePhotoData,
+          profilePhotoType: optimizedPhoto.type || file?.type,
+          profilePhotoSize: optimizedPhoto.size || file?.size,
+          profilePhotoData: optimizedPhoto.dataUrl,
           consent: formData.get("consent") === "on",
         },
       });
@@ -1047,7 +1115,8 @@ if (adminApp) {
       setSignedIn(result.admin);
       await Promise.all([loadRequests(), loadMembers(), loadPosts(), loadImpactReports(), loadGovernanceProfiles(), loadPartners()]);
     } catch (error) {
-      setStatus(loginStatus, error.message, "error");
+      const message = error instanceof Error ? error.message : "Unable to sign in. Please try again.";
+      setStatus(loginStatus, message, "error");
     }
   });
 

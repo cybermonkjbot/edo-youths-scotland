@@ -113,8 +113,16 @@ export const login = mutationGeneric({
       .withIndex("by_email", (q) => q.eq("email", normalizeEmail(args.email)))
       .unique();
 
-    if (!admin || !admin.active) {
-      throw new Error("Invalid email or password.");
+    if (!admin) {
+      throw new Error("No admin account is configured for this email. Run the bootstrap command first.");
+    }
+
+    if (!admin.active) {
+      throw new Error("This admin account is inactive.");
+    }
+
+    if (!admin.passwordSalt) {
+      throw new Error("This admin account is missing its password configuration. Please re-run bootstrap.");
     }
 
     const passwordHash = await hashPassword(args.password, admin.passwordSalt);

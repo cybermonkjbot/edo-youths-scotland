@@ -1951,7 +1951,7 @@ if (adminApp) {
           loadPosts(),
           loadImpactReports(),
           loadGovernanceProfiles(),
-          loadPartners(),
+          loadPartners()
         ]);
       })
       .catch(() => {

@@ -15,6 +15,7 @@ import type * as http from "../http.js";
 import type * as impactReports from "../impactReports.js";
 import type * as joinRequests from "../joinRequests.js";
 import type * as members from "../members.js";
+import type * as partners from "../partners.js";
 
 import type {
   ApiFromModules,
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   impactReports: typeof impactReports;
   joinRequests: typeof joinRequests;
   members: typeof members;
+  partners: typeof partners;
 }>;
 
 /**

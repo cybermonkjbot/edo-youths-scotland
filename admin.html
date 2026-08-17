@@ -5,333 +5,874 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <meta name="theme-color" content="#053c2a" />
-    <title>Admin | Edo Youths Scotland CIC Agency</title>
+    <title>Admin Dashboard | Edo Youths Scotland CIC</title>
     <link rel="icon" href="assets/eys-logo-gold-transparent.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css?v=3a5c975" />
   </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header on-light-surface" data-header>
-      <a class="brand" href="index.html#home" aria-label="Edo Youths Scotland home">
-        <img class="brand-logo-rest" src="assets/eys-logo-white-transparent.png" alt="" aria-hidden="true" />
-        <img class="brand-logo-scrolled" src="assets/eys-logo-dark-transparent.png" alt="" aria-hidden="true" />
-        <span>Edo Youths<br />Scotland</span>
-      </a>
+  <body class="admin-body">
+    <a class="skip-link" href="#admin-main">Skip to content</a>
 
-      <button class="nav-toggle" data-nav-toggle type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-navigation">
-        <span></span>
-        <span></span>
-      </button>
+    <section class="admin-shell" data-admin-app>
+      <!-- Admin Login View -->
+      <section class="admin-login-wrapper" data-admin-login>
+        <div class="admin-login-card">
+          <div class="admin-login-header">
+            <img class="admin-login-logo" src="assets/eys-logo-gold-transparent.png" alt="EYS Logo" />
+            <h1>EYS Admin Workspace</h1>
+            <p>Edo Youths Scotland CIC Agency Management Console</p>
+          </div>
 
-      <nav class="nav-shell" data-nav id="site-navigation" aria-label="Primary navigation">
-        <a href="index.html#story">Story</a>
-        <a href="index.html#promise">Promise</a>
-        <a href="community.html">Community</a>
-        <a href="members.html">Members</a>
-        <a href="events.html">Events</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="blog.html">Blog</a>
-      </nav>
+          <form class="admin-login-form" data-admin-login-form method="POST" onsubmit="return false;">
+            <div class="form-group">
+              <label for="admin-email">Email Address</label>
+              <div class="input-with-icon">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <input id="admin-email" name="email" type="email" autocomplete="email" placeholder="admin@edoyouthsscotland.org" required />
+              </div>
+            </div>
 
-      <div class="header-actions">
-        <a class="button secondary" href="join.html">Join EYS</a>
-        <a class="button primary" href="partner.html">Partner with EYS</a>
-      </div>
-    </header>
+            <div class="form-group">
+              <label for="admin-password">Password</label>
+              <div class="input-with-icon">
+                <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input id="admin-password" name="password" type="password" autocomplete="current-password" placeholder="••••••••••••" required />
+              </div>
+            </div>
 
-    <main id="main">
-      <section class="admin-shell" data-admin-app>
-        <section class="admin-login" data-admin-login>
-          <form class="admin-form" data-admin-login-form>
-            <h2>Sign in</h2>
-            <label>
-              Email
-              <input name="email" type="email" autocomplete="email" placeholder="Email" required />
-            </label>
-            <label>
-              Password
-              <input name="password" type="password" autocomplete="current-password" placeholder="Password" required />
-            </label>
-            <button class="button primary" type="submit">Sign in</button>
+            <button class="button primary admin-submit-btn" type="submit">
+              <span>Sign In to Admin Workspace</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            
             <p class="form-status" data-admin-login-status role="status"></p>
           </form>
-        </section>
+          
+          <div class="admin-login-footer">
+            <a href="index.html" class="back-to-site">← Return to Public Website</a>
+          </div>
+        </div>
+      </section>
 
-        <section class="admin-dashboard" data-admin-dashboard hidden>
-          <div class="admin-toolbar">
-            <div>
-              <strong data-admin-name>Admin</strong>
+      <!-- Proper Admin Panel Dashboard Layout -->
+      <div class="admin-dashboard-layout" data-admin-dashboard hidden>
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar" data-admin-sidebar>
+          <div class="sidebar-brand">
+            <img src="assets/eys-logo-gold-transparent.png" alt="EYS Logo" class="sidebar-logo" />
+            <div class="brand-text">
+              <span class="brand-title">EYS Admin</span>
             </div>
-            <button class="button secondary" type="button" data-admin-logout>Sign out</button>
+            <button class="sidebar-toggle-btn" type="button" data-sidebar-toggle aria-label="Toggle sidebar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
           </div>
 
-          <div class="admin-tabs" role="tablist" aria-label="Admin sections">
-            <button class="is-active" type="button" data-admin-tab="requests">Join requests</button>
-            <button type="button" data-admin-tab="members">Members</button>
-            <button type="button" data-admin-tab="blog">Blog posts</button>
-            <button type="button" data-admin-tab="impact">Impact reports</button>
-            <button type="button" data-admin-tab="governance">Governance</button>
-            <button type="button" data-admin-tab="partners">Partners</button>
+          <nav class="sidebar-nav" role="tablist" aria-label="Admin Navigation">
+            <button class="sidebar-nav-item is-active" type="button" data-admin-tab="overview">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="9" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="5" rx="1"></rect>
+                <rect x="14" y="12" width="7" height="9" rx="1"></rect>
+                <rect x="3" y="16" width="7" height="5" rx="1"></rect>
+              </svg>
+              <span>Overview</span>
+            </button>
+
+            <button class="sidebar-nav-item" type="button" data-admin-tab="requests">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h9"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+                <circle cx="18" cy="18" r="3"></circle>
+                <polyline points="18 16 18 18 19 19"></polyline>
+              </svg>
+              <span>Join Requests</span>
+              <span class="nav-counter" data-badge="requests">0</span>
+            </button>
+
+            <button class="sidebar-nav-item" type="button" data-admin-tab="members">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>Members</span>
+              <span class="nav-counter" data-badge="members">0</span>
+            </button>
+
+            <button class="sidebar-nav-item" type="button" data-admin-tab="blog">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>Blog Posts</span>
+              <span class="nav-counter" data-badge="blog">0</span>
+            </button>
+
+            <button class="sidebar-nav-item" type="button" data-admin-tab="impact">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              <span>Impact Reports</span>
+              <span class="nav-counter" data-badge="impact">0</span>
+            </button>
+
+            <button class="sidebar-nav-item" type="button" data-admin-tab="governance">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              <span>Governance</span>
+              <span class="nav-counter" data-badge="governance">0</span>
+            </button>
+
+            <button class="sidebar-nav-item" type="button" data-admin-tab="partners">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>Partners</span>
+              <span class="nav-counter" data-badge="partners">0</span>
+            </button>
+          </nav>
+
+          <div class="sidebar-footer">
+            <div class="admin-user-info">
+              <div class="user-avatar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div class="user-details">
+                <strong data-admin-name class="user-name">Admin</strong>
+                <span class="user-role">Administrator</span>
+              </div>
+            </div>
+            <button class="button secondary icon-button sidebar-logout-btn" type="button" data-admin-logout title="Sign out">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Dashboard View -->
+        <main class="admin-main" id="admin-main">
+          <!-- Top Header Toolbar -->
+          <header class="admin-topbar">
+            <div class="topbar-left">
+              <button class="mobile-sidebar-toggle" type="button" data-mobile-menu-toggle aria-label="Open sidebar menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+              </button>
+              <h1 class="topbar-page-title" data-admin-page-title>Overview</h1>
+            </div>
+
+            <div class="topbar-right">
+              <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="search" placeholder="Search current section..." data-admin-search aria-label="Search current section" />
+              </div>
+
+              <a href="index.html" class="button secondary compact-button view-site-link" target="_blank" rel="noreferrer">
+                <span>View Site</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </header>
+
+          <!-- Content Panels -->
+          <div class="admin-content-area">
+
+            <!-- PANEL 1: OVERVIEW -->
+            <section class="admin-panel is-active" data-admin-panel="overview">
+              <div class="overview-hero">
+                <div class="welcome-text">
+                  <h2>Welcome to EYS Management Console</h2>
+                  <p>Monitor community engagement, member directory, story publications, and governance operations in real-time.</p>
+                </div>
+                <div class="overview-quick-actions">
+                  <button class="button primary compact-button" type="button" data-open-drawer="blog">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>New Post</span>
+                  </button>
+                  <button class="button secondary compact-button" type="button" data-open-drawer="members">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Add Member</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Stat Cards Grid -->
+              <div class="stats-grid">
+                <div class="stat-card accent-amber" data-stat-card="requests">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h9"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Pending Join Requests</span>
+                    <strong class="stat-value" data-stat="pending-requests">0</strong>
+                  </div>
+                  <button class="stat-link" type="button" data-navigate-tab="requests">Review Requests →</button>
+                </div>
+
+                <div class="stat-card accent-emerald" data-stat-card="members">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Active Members</span>
+                    <strong class="stat-value" data-stat="members-count">0</strong>
+                  </div>
+                  <button class="stat-link" type="button" data-navigate-tab="members">Manage Members →</button>
+                </div>
+
+                <div class="stat-card accent-blue" data-stat-card="blog">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Published Blog Posts</span>
+                    <strong class="stat-value" data-stat="posts-count">0</strong>
+                  </div>
+                  <button class="stat-link" type="button" data-navigate-tab="blog">View Blog Posts →</button>
+                </div>
+
+                <div class="stat-card accent-purple" data-stat-card="impact">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="20" x2="18" y2="10"></line>
+                      <line x1="12" y1="20" x2="12" y2="4"></line>
+                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Impact Reports</span>
+                    <strong class="stat-value" data-stat="impact-count">0</strong>
+                  </div>
+                  <button class="stat-link" type="button" data-navigate-tab="impact">View Reports →</button>
+                </div>
+
+                <div class="stat-card accent-gold" data-stat-card="governance">
+                  <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    </svg>
+                  </div>
+                  <div class="stat-info">
+                    <span class="stat-label">Governance & Partners</span>
+                    <strong class="stat-value" data-stat="governance-count">0</strong>
+                  </div>
+                  <button class="stat-link" type="button" data-navigate-tab="governance">View Directors →</button>
+                </div>
+              </div>
+
+              <!-- Dashboard Overview Split Layout -->
+              <div class="overview-dual-column">
+                <div class="overview-card">
+                  <div class="overview-card-header">
+                    <h3>Recent Join Requests</h3>
+                    <button class="button secondary compact-button" type="button" data-navigate-tab="requests">View All</button>
+                  </div>
+                  <div class="overview-list" data-overview-requests-list>
+                    <p class="empty-state">Loading recent requests...</p>
+                  </div>
+                </div>
+
+                <div class="overview-card">
+                  <div class="overview-card-header">
+                    <h3>Recent Blog Updates</h3>
+                    <button class="button secondary compact-button" type="button" data-navigate-tab="blog">View All</button>
+                  </div>
+                  <div class="overview-list" data-overview-blog-list>
+                    <p class="empty-state">Loading recent blog posts...</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- PANEL 2: JOIN REQUESTS -->
+            <section class="admin-panel" data-admin-panel="requests">
+              <div class="admin-panel-heading">
+                <div class="panel-header-title">
+                  <h2>Join Requests</h2>
+                  <p class="panel-subtitle">Review applications submitted by prospective members and volunteers.</p>
+                </div>
+
+                <div class="panel-actions">
+                  <div class="filter-pills" data-filter-group="requests">
+                    <button class="filter-pill is-active" type="button" data-filter-status="all">All</button>
+                    <button class="filter-pill" type="button" data-filter-status="new">New</button>
+                    <button class="filter-pill" type="button" data-filter-status="reviewed">Reviewed</button>
+                    <button class="filter-pill" type="button" data-filter-status="archived">Archived</button>
+                  </div>
+                  <button class="button secondary compact-button" type="button" data-export-requests title="Export Join Requests as CSV">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>Export CSV</span>
+                  </button>
+                  <button class="button secondary compact-button" type="button" data-refresh-requests>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    <span>Refresh</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="admin-list" data-requests-list></div>
+            </section>
+
+            <!-- PANEL 3: MEMBERS -->
+            <section class="admin-panel" data-admin-panel="members">
+              <div class="admin-panel-heading">
+                <div class="panel-header-title">
+                  <h2>Members Directory</h2>
+                  <p class="panel-subtitle">Manage public member profiles, mentors, and community contributors.</p>
+                </div>
+
+                <div class="panel-actions">
+                  <div class="filter-pills" data-filter-group="members">
+                    <button class="filter-pill is-active" type="button" data-filter-status="all">All</button>
+                    <button class="filter-pill" type="button" data-filter-status="public">Public</button>
+                    <button class="filter-pill" type="button" data-filter-status="draft">Draft</button>
+                    <button class="filter-pill" type="button" data-filter-status="hidden">Hidden</button>
+                  </div>
+                  <button class="button primary compact-button" type="button" data-open-drawer="members">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Add Member</span>
+                  </button>
+                  <button class="button secondary compact-button" type="button" data-refresh-members>Refresh</button>
+                </div>
+              </div>
+
+              <div class="admin-list" data-members-list></div>
+            </section>
+
+            <!-- PANEL 4: BLOG POSTS -->
+            <section class="admin-panel" data-admin-panel="blog">
+              <div class="admin-panel-heading">
+                <div class="panel-header-title">
+                  <h2>Blog Posts & Updates</h2>
+                  <p class="panel-subtitle">Publish stories, news, and press announcements.</p>
+                </div>
+
+                <div class="panel-actions">
+                  <div class="filter-pills" data-filter-group="blog">
+                    <button class="filter-pill is-active" type="button" data-filter-status="all">All</button>
+                    <button class="filter-pill" type="button" data-filter-status="published">Published</button>
+                    <button class="filter-pill" type="button" data-filter-status="draft">Draft</button>
+                  </div>
+                  <button class="button primary compact-button" type="button" data-open-drawer="blog">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>New Post</span>
+                  </button>
+                  <button class="button secondary compact-button" type="button" data-refresh-posts>Refresh</button>
+                </div>
+              </div>
+
+              <div class="admin-list" data-posts-list></div>
+            </section>
+
+            <!-- PANEL 5: IMPACT REPORTS -->
+            <section class="admin-panel" data-admin-panel="impact">
+              <div class="admin-panel-heading">
+                <div class="panel-header-title">
+                  <h2>Impact Reports</h2>
+                  <p class="panel-subtitle">Document organizational milestones, annual notes, and metric summaries.</p>
+                </div>
+
+                <div class="panel-actions">
+                  <div class="filter-pills" data-filter-group="impact">
+                    <button class="filter-pill is-active" type="button" data-filter-status="all">All</button>
+                    <button class="filter-pill" type="button" data-filter-status="published">Published</button>
+                    <button class="filter-pill" type="button" data-filter-status="draft">Draft</button>
+                  </div>
+                  <button class="button primary compact-button" type="button" data-open-drawer="impact">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>New Report</span>
+                  </button>
+                  <button class="button secondary compact-button" type="button" data-refresh-impact-reports>Refresh</button>
+                </div>
+              </div>
+
+              <div class="admin-list" data-impact-reports-list></div>
+            </section>
+
+            <!-- PANEL 6: GOVERNANCE -->
+            <section class="admin-panel" data-admin-panel="governance">
+              <div class="admin-panel-heading">
+                <div class="panel-header-title">
+                  <h2>Governance Profiles</h2>
+                  <p class="panel-subtitle">Manage profiles for board members, advisers, and leadership team.</p>
+                </div>
+
+                <div class="panel-actions">
+                  <div class="filter-pills" data-filter-group="governance">
+                    <button class="filter-pill is-active" type="button" data-filter-status="all">All</button>
+                    <button class="filter-pill" type="button" data-filter-status="public">Public</button>
+                    <button class="filter-pill" type="button" data-filter-status="draft">Draft</button>
+                  </div>
+                  <button class="button primary compact-button" type="button" data-open-drawer="governance">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>New Profile</span>
+                  </button>
+                  <button class="button secondary compact-button" type="button" data-refresh-governance>Refresh</button>
+                </div>
+              </div>
+
+              <div class="admin-list" data-governance-list></div>
+            </section>
+
+            <!-- PANEL 7: PARTNERS -->
+            <section class="admin-panel" data-admin-panel="partners">
+              <div class="admin-panel-heading">
+                <div class="panel-header-title">
+                  <h2>Partners & Sponsors</h2>
+                  <p class="panel-subtitle">Curate listings for organizational partners, sponsors, and supporters.</p>
+                </div>
+
+                <div class="panel-actions">
+                  <div class="filter-pills" data-filter-group="partners">
+                    <button class="filter-pill is-active" type="button" data-filter-status="all">All</button>
+                    <button class="filter-pill" type="button" data-filter-status="public">Public</button>
+                    <button class="filter-pill" type="button" data-filter-status="draft">Draft</button>
+                  </div>
+                  <button class="button primary compact-button" type="button" data-open-drawer="partners">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>New Partner</span>
+                  </button>
+                  <button class="button secondary compact-button" type="button" data-refresh-partners>Refresh</button>
+                </div>
+              </div>
+
+              <div class="admin-list" data-partners-list></div>
+            </section>
+
+          </div>
+        </main>
+      </div>
+
+      <!-- Slide-Over Editor Drawer Modal -->
+      <div class="admin-drawer-overlay" data-admin-drawer-overlay hidden>
+        <div class="admin-drawer" data-admin-drawer>
+          <div class="drawer-header">
+            <h3 data-drawer-title>Edit Item</h3>
+            <button class="drawer-close-btn" type="button" data-close-drawer aria-label="Close editor drawer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
           </div>
 
-          <section class="admin-panel is-active" data-admin-panel="requests">
-            <div class="admin-panel-heading">
-              <h2>Join requests</h2>
-              <button class="button secondary" type="button" data-refresh-requests>Refresh</button>
-            </div>
-            <div class="admin-list" data-requests-list></div>
-          </section>
-
-          <section class="admin-panel" data-admin-panel="members">
-            <div class="admin-panel-heading">
-              <h2>Members</h2>
-              <button class="button secondary" type="button" data-refresh-members>Refresh</button>
-            </div>
-
-            <form class="admin-card admin-form member-editor" data-member-editor>
+          <div class="drawer-body">
+            <!-- Member Editor Form -->
+            <form class="admin-card admin-form member-editor" data-member-editor method="POST" hidden>
               <input name="id" type="hidden" />
               <label>
-                Name
-                <input name="name" type="text" required />
+                <span>Name <span class="required-star">*</span></span>
+                <input name="name" type="text" required placeholder="e.g. Jane Doe" />
               </label>
               <label>
-                Role or contribution
-                <input name="role" type="text" placeholder="Member, mentor, volunteer, business owner" required />
+                <span>Role or Contribution <span class="required-star">*</span></span>
+                <select name="role" required>
+                  <option value="">Select Role...</option>
+                  <option value="Community Member">Community Member</option>
+                  <option value="Youth Mentor">Youth Mentor</option>
+                  <option value="Volunteer">Volunteer</option>
+                  <option value="Business Owner / Entrepreneur">Business Owner / Entrepreneur</option>
+                  <option value="Community Contributor">Community Contributor</option>
+                  <option value="Youth Ambassador">Youth Ambassador</option>
+                </select>
               </label>
               <label>
-                Location
-                <input name="location" type="text" placeholder="Glasgow, Edinburgh, Aberdeen..." required />
+                <span>Location <span class="required-star">*</span></span>
+                <select name="location" required>
+                  <option value="">Select Location...</option>
+                  <option value="Glasgow">Glasgow</option>
+                  <option value="Edinburgh">Edinburgh</option>
+                  <option value="Aberdeen">Aberdeen</option>
+                  <option value="Dundee">Dundee</option>
+                  <option value="Inverness">Inverness</option>
+                  <option value="Stirling">Stirling</option>
+                  <option value="Fife">Fife</option>
+                  <option value="Perth">Perth</option>
+                  <option value="Other Region in Scotland">Other Region in Scotland</option>
+                </select>
               </label>
               <label>
-                Bio
-                <textarea name="bio" rows="5" required></textarea>
+                <span>Bio <span class="required-star">*</span></span>
+                <textarea name="bio" rows="4" required placeholder="Short background description of background and involvement"></textarea>
               </label>
               <label>
-                Skills or interests
-                <input name="skills" type="text" placeholder="Mentoring, catering, photography" />
+                <span>Skills or Interests</span>
+                <input name="skills" type="text" placeholder="e.g. Mentoring, Catering, Photography" />
+                <span class="field-hint">Comma-separated list of key skills or focus areas</span>
               </label>
               <label>
-                Business or project name
-                <input name="businessName" type="text" />
+                <span>Business or Project Name</span>
+                <input name="businessName" type="text" placeholder="Optional enterprise or community project name" />
               </label>
               <label>
-                Website URL
+                <span>Website URL</span>
                 <input name="websiteUrl" type="url" placeholder="https://..." />
               </label>
               <label>
-                Profile image URL
-                <input name="imageUrl" type="url" placeholder="https://..." />
+                <span>Profile Photo</span>
+                <div class="file-upload-zone" data-upload-zone="imageUrl">
+                  <input name="imageUrl" type="hidden" />
+                  <input type="file" accept="image/*" class="file-input" hidden />
+                  <div class="upload-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span>Click or drag photo file to upload</span>
+                  </div>
+                  <div class="upload-preview" hidden>
+                    <img src="" alt="Preview" class="preview-img" />
+                    <button class="remove-file-btn" type="button" title="Remove image">✕</button>
+                  </div>
+                </div>
+                <span class="field-hint">JPG, PNG, WebP or GIF up to 5MB</span>
               </label>
               <label>
-                Visibility
+                <span>Visibility <span class="required-star">*</span></span>
                 <select name="visibility" required>
-                  <option value="draft">Draft</option>
-                  <option value="public">Public</option>
-                  <option value="hidden">Hidden</option>
+                  <option value="draft">Draft (Hidden from website)</option>
+                  <option value="public">Public (Visible on Members page)</option>
+                  <option value="hidden">Archived / Hidden</option>
                 </select>
               </label>
               <div class="form-submit">
-                <button class="button primary" type="submit">Save member</button>
-                <button class="button secondary" type="button" data-clear-member-editor>Clear</button>
+                <button class="button primary" type="submit">Save Member Profile</button>
+                <button class="button secondary" type="button" data-clear-member-editor>Cancel / Reset</button>
               </div>
               <p class="form-status" data-member-editor-status role="status"></p>
             </form>
 
-            <div class="admin-list" data-members-list></div>
-          </section>
-
-          <section class="admin-panel" data-admin-panel="blog">
-            <div class="admin-panel-heading">
-              <h2>Blog posts</h2>
-              <button class="button secondary" type="button" data-refresh-posts>Refresh</button>
-            </div>
-
-            <form class="admin-card admin-form blog-editor" data-blog-editor>
+            <!-- Blog Editor Form -->
+            <form class="admin-card admin-form blog-editor" data-blog-editor method="POST" hidden>
               <input name="id" type="hidden" />
               <label>
-                Title
-                <input name="title" type="text" required />
+                <span>Article Title <span class="required-star">*</span></span>
+                <input name="title" type="text" required placeholder="Headline title for the post" />
               </label>
               <label>
-                Excerpt
-                <textarea name="excerpt" rows="3" required></textarea>
+                <span>Summary Excerpt <span class="required-star">*</span></span>
+                <textarea name="excerpt" rows="3" required placeholder="Brief 1-2 sentence summary displayed on preview cards"></textarea>
               </label>
               <label>
-                Body
-                <textarea name="body" rows="9" required></textarea>
+                <span>Article Body <span class="required-star">*</span></span>
+                <textarea name="body" rows="8" required placeholder="Full news post content or story details"></textarea>
               </label>
               <label>
-                Cover image URL
-                <input name="coverImageUrl" type="url" placeholder="https://..." />
+                <span>Cover Image</span>
+                <div class="file-upload-zone" data-upload-zone="coverImageUrl">
+                  <input name="coverImageUrl" type="hidden" />
+                  <input type="file" accept="image/*" class="file-input" hidden />
+                  <div class="upload-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span>Click or drag cover image to upload</span>
+                  </div>
+                  <div class="upload-preview" hidden>
+                    <img src="" alt="Preview" class="preview-img" />
+                    <button class="remove-file-btn" type="button" title="Remove image">✕</button>
+                  </div>
+                </div>
+                <span class="field-hint">Featured article hero banner image</span>
               </label>
               <label>
-                Status
+                <span>Status <span class="required-star">*</span></span>
                 <select name="status" required>
-                  <option value="draft">Draft</option>
-                  <option value="published">Published</option>
+                  <option value="draft">Draft (Work in progress)</option>
+                  <option value="published">Published (Visible on news feed)</option>
                 </select>
               </label>
               <div class="form-submit">
-                <button class="button primary" type="submit">Save post</button>
-                <button class="button secondary" type="button" data-clear-editor>Clear</button>
+                <button class="button primary" type="submit">Save Blog Post</button>
+                <button class="button secondary" type="button" data-clear-editor>Cancel / Reset</button>
               </div>
               <p class="form-status" data-blog-editor-status role="status"></p>
             </form>
 
-            <div class="admin-list" data-posts-list></div>
-          </section>
-
-          <section class="admin-panel" data-admin-panel="impact">
-            <div class="admin-panel-heading">
-              <h2>Impact reports</h2>
-              <button class="button secondary" type="button" data-refresh-impact-reports>Refresh</button>
-            </div>
-
-            <form class="admin-card admin-form impact-editor" data-impact-editor>
+            <!-- Impact Editor Form -->
+            <form class="admin-card admin-form impact-editor" data-impact-editor method="POST" hidden>
               <input name="id" type="hidden" />
               <label>
-                Title
-                <input name="title" type="text" placeholder="Annual impact note" required />
+                <span>Report Title <span class="required-star">*</span></span>
+                <input name="title" type="text" placeholder="e.g. Annual Youth Impact Report 2026" required />
               </label>
               <label>
-                Period
-                <input name="period" type="text" placeholder="2026, Q1 2026, Jan-Mar 2026" required />
+                <span>Time Period <span class="required-star">*</span></span>
+                <select name="period" required>
+                  <option value="">Select Time Period...</option>
+                  <option value="Annual Report 2026">Annual Report 2026</option>
+                  <option value="Annual Report 2025">Annual Report 2025</option>
+                  <option value="Q1 2026">Q1 2026</option>
+                  <option value="Q2 2026">Q2 2026</option>
+                  <option value="Q3 2026">Q3 2026</option>
+                  <option value="Q4 2026">Q4 2026</option>
+                  <option value="Q1 2025">Q1 2025</option>
+                  <option value="Q2 2025">Q2 2025</option>
+                </select>
               </label>
               <label>
-                Summary
-                <textarea name="summary" rows="3" required></textarea>
+                <span>Executive Summary <span class="required-star">*</span></span>
+                <textarea name="summary" rows="3" required placeholder="Key takeaway summary of organizational impact"></textarea>
               </label>
               <label>
-                Body
-                <textarea name="body" rows="8" required></textarea>
+                <span>Full Details <span class="required-star">*</span></span>
+                <textarea name="body" rows="6" required placeholder="Comprehensive report body and program achievements"></textarea>
               </label>
               <label>
-                Metric highlights
-                <textarea name="metricHighlights" rows="4" placeholder="One highlight per line"></textarea>
+                <span>Metric Highlights</span>
+                <textarea name="metricHighlights" rows="3" placeholder="50+ Youth Mentored&#10;12 Community Events&#10;95% Satisfaction"></textarea>
+                <span class="field-hint">Enter one stat highlight per line</span>
               </label>
               <label>
-                Report file URL
-                <input name="fileUrl" type="url" placeholder="https://..." />
+                <span>Report File or Document Image</span>
+                <div class="file-upload-zone" data-upload-zone="fileUrl">
+                  <input name="fileUrl" type="hidden" />
+                  <input type="file" accept="image/*,application/pdf" class="file-input" hidden />
+                  <div class="upload-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span>Click or drag report file / cover image to upload</span>
+                  </div>
+                  <div class="upload-preview" hidden>
+                    <img src="" alt="Preview" class="preview-img" />
+                    <button class="remove-file-btn" type="button" title="Remove file">✕</button>
+                  </div>
+                </div>
+                <span class="field-hint">Upload PDF or image file for report download link</span>
               </label>
               <label>
-                Status
+                <span>Status <span class="required-star">*</span></span>
                 <select name="status" required>
                   <option value="draft">Draft</option>
                   <option value="published">Published</option>
                 </select>
               </label>
               <div class="form-submit">
-                <button class="button primary" type="submit">Save report</button>
-                <button class="button secondary" type="button" data-clear-impact-editor>Clear</button>
+                <button class="button primary" type="submit">Save Impact Report</button>
+                <button class="button secondary" type="button" data-clear-impact-editor>Cancel / Reset</button>
               </div>
               <p class="form-status" data-impact-editor-status role="status"></p>
             </form>
 
-            <div class="admin-list" data-impact-reports-list></div>
-          </section>
-
-          <section class="admin-panel" data-admin-panel="governance">
-            <div class="admin-panel-heading">
-              <h2>Governance profiles</h2>
-              <button class="button secondary" type="button" data-refresh-governance>Refresh</button>
-            </div>
-
-            <form class="admin-card admin-form governance-editor" data-governance-editor>
+            <!-- Governance Editor Form -->
+            <form class="admin-card admin-form governance-editor" data-governance-editor method="POST" hidden>
               <input name="id" type="hidden" />
               <label>
-                Name
-                <input name="name" type="text" placeholder="Board member, adviser or team group" required />
+                <span>Full Name <span class="required-star">*</span></span>
+                <input name="name" type="text" placeholder="e.g. Dr. Amaechi Nosa" required />
               </label>
               <label>
-                Role
-                <input name="role" type="text" placeholder="Director, Safeguarding lead, Community team" required />
+                <span>Governance Role <span class="required-star">*</span></span>
+                <select name="role" required>
+                  <option value="">Select Governance Role...</option>
+                  <option value="Board Director">Board Director</option>
+                  <option value="Chairperson">Chairperson</option>
+                  <option value="Trustee">Trustee</option>
+                  <option value="Company Secretary">Company Secretary</option>
+                  <option value="Treasurer / Finance Lead">Treasurer / Finance Lead</option>
+                  <option value="Safeguarding Lead">Safeguarding Lead</option>
+                  <option value="Board Adviser">Board Adviser</option>
+                  <option value="Executive Officer">Executive Officer</option>
+                </select>
               </label>
               <label>
-                Bio
-                <textarea name="bio" rows="6" required></textarea>
+                <span>Bio & Background <span class="required-star">*</span></span>
+                <textarea name="bio" rows="5" required placeholder="Professional background and governance responsibilities"></textarea>
               </label>
               <label>
-                Image URL
-                <input name="imageUrl" type="url" placeholder="https://..." />
+                <span>Director Photo</span>
+                <div class="file-upload-zone" data-upload-zone="imageUrl">
+                  <input name="imageUrl" type="hidden" />
+                  <input type="file" accept="image/*" class="file-input" hidden />
+                  <div class="upload-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span>Click or drag photo file to upload</span>
+                  </div>
+                  <div class="upload-preview" hidden>
+                    <img src="" alt="Preview" class="preview-img" />
+                    <button class="remove-file-btn" type="button" title="Remove image">✕</button>
+                  </div>
+                </div>
               </label>
               <label>
-                Sort order
+                <span>Sort Order <span class="required-star">*</span></span>
                 <input name="sortOrder" type="number" step="1" value="100" required />
+                <span class="field-hint">Lower numbers appear first (e.g., 10 for Chair, 20 for Director)</span>
               </label>
               <label>
-                Visibility
+                <span>Visibility <span class="required-star">*</span></span>
                 <select name="visibility" required>
                   <option value="draft">Draft</option>
-                  <option value="public">Public</option>
+                  <option value="public">Public (Visible on Governance page)</option>
                   <option value="hidden">Hidden</option>
                 </select>
               </label>
               <div class="form-submit">
-                <button class="button primary" type="submit">Save profile</button>
-                <button class="button secondary" type="button" data-clear-governance-editor>Clear</button>
+                <button class="button primary" type="submit">Save Governance Profile</button>
+                <button class="button secondary" type="button" data-clear-governance-editor>Cancel / Reset</button>
               </div>
               <p class="form-status" data-governance-editor-status role="status"></p>
             </form>
 
-            <div class="admin-list" data-governance-list></div>
-          </section>
-
-          <section class="admin-panel" data-admin-panel="partners">
-            <div class="admin-panel-heading">
-              <h2>Partners</h2>
-              <button class="button secondary" type="button" data-refresh-partners>Refresh</button>
-            </div>
-
-            <form class="admin-card admin-form partner-editor" data-partner-editor>
+            <!-- Partner Editor Form -->
+            <form class="admin-card admin-form partner-editor" data-partner-editor method="POST" hidden>
               <input name="id" type="hidden" />
               <label>
-                Name
-                <input name="name" type="text" required />
+                <span>Partner or Sponsor Name <span class="required-star">*</span></span>
+                <input name="name" type="text" required placeholder="e.g. Glasgow City Trust" />
               </label>
               <label>
-                Description
-                <textarea name="description" rows="5" required></textarea>
+                <span>Description <span class="required-star">*</span></span>
+                <textarea name="description" rows="4" required placeholder="Overview of partnership support and collaboration"></textarea>
               </label>
               <label>
-                Website URL
-                <input name="websiteUrl" type="url" placeholder="https://..." />
+                <span>Website URL</span>
+                <input name="websiteUrl" type="url" placeholder="https://partner-website.org" />
               </label>
               <label>
-                Logo URL
-                <input name="logoUrl" type="url" placeholder="https://..." />
+                <span>Logo Image</span>
+                <div class="file-upload-zone" data-upload-zone="logoUrl">
+                  <input name="logoUrl" type="hidden" />
+                  <input type="file" accept="image/*" class="file-input" hidden />
+                  <div class="upload-placeholder">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="17 8 12 3 7 8"></polyline>
+                      <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <span>Click or drag logo file to upload</span>
+                  </div>
+                  <div class="upload-preview" hidden>
+                    <img src="" alt="Preview" class="preview-img" />
+                    <button class="remove-file-btn" type="button" title="Remove logo">✕</button>
+                  </div>
+                </div>
+                <span class="field-hint">High-resolution logo image</span>
               </label>
               <label>
-                Sort order
+                <span>Sort Order <span class="required-star">*</span></span>
                 <input name="sortOrder" type="number" step="1" value="100" required />
+                <span class="field-hint">Display priority order</span>
               </label>
               <label>
-                Visibility
+                <span>Visibility <span class="required-star">*</span></span>
                 <select name="visibility" required>
                   <option value="draft">Draft</option>
-                  <option value="public">Public</option>
+                  <option value="public">Public (Visible on Partners list)</option>
                   <option value="hidden">Hidden</option>
                 </select>
               </label>
               <div class="form-submit">
-                <button class="button primary" type="submit">Save partner</button>
-                <button class="button secondary" type="button" data-clear-partner-editor>Clear</button>
+                <button class="button primary" type="submit">Save Partner</button>
+                <button class="button secondary" type="button" data-clear-partner-editor>Cancel / Reset</button>
               </div>
               <p class="form-status" data-partner-editor-status role="status"></p>
             </form>
 
-            <div class="admin-list" data-partners-list></div>
-          </section>
-        </section>
-      </section>
-    </main>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Notification System -->
+      <div class="toast-container" data-toast-container></div>
+
+    </section>
 
     <script src="config.js?v=20260530-governance"></script>
     <script src="script.js?v=20260530-governance"></script>
   </body>
 </html>
+

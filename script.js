@@ -283,6 +283,153 @@ function formatDate(timestamp) {
   }).format(new Date(timestamp));
 }
 
+const publicStateIllustrations = {
+  empty: "https://undraw.co/illustrations/undraw_no_data_re_kwbl.svg",
+  error: "https://undraw.co/illustrations/undraw_server_down_s4lk.svg",
+};
+
+const renderPublicStateCard = ({
+  title,
+  message,
+  kind = "empty",
+  illustration,
+}) => `
+  <div class="content-state content-state-${escapeHtml(kind)}">
+    ${illustration ? `<img class="content-state-illustration" src="${escapeHtml(illustration)}" alt="" loading="lazy" />` : ""}
+    <h3 class="content-state-title">${escapeHtml(title)}</h3>
+    <p class="content-state-message">${escapeHtml(message)}</p>
+  </div>
+`;
+
+const renderPublicGridSkeleton = (variant = "card", count = 3) => {
+  const isMediaCard = ["member", "blog", "governance"].includes(variant);
+  const includeFooter = variant === "impact";
+
+  return Array.from({ length: count })
+    .map(
+      () => `
+        <article class="public-skeleton-card" aria-hidden="true">
+          ${isMediaCard ? '<span class="public-skeleton-media"></span>' : ""}
+          <div class="public-skeleton-body">
+            <span class="public-skeleton-line title"></span>
+            <span class="public-skeleton-line"></span>
+            <span class="public-skeleton-line short"></span>
+            ${includeFooter ? '<span class="public-skeleton-line tiny"></span>' : ""}
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+};
+
+const initializeStaticMediaStates = () => {
+  const attachImageLoadingState = (imageNode, wrapperNode = imageNode) => {
+    if (!imageNode || !wrapperNode) return;
+
+    const clearLoading = () => {
+      wrapperNode.classList.remove("media-loading");
+      imageNode.classList.remove("media-loading");
+    };
+
+    wrapperNode.classList.add("media-loading");
+    imageNode.classList.add("media-loading");
+
+    if (imageNode.complete && imageNode.naturalWidth > 0) {
+      clearLoading();
+      return;
+    }
+
+    imageNode.addEventListener("load", clearLoading, { once: true });
+    imageNode.addEventListener(
+      "error",
+      () => {
+        clearLoading();
+        wrapperNode.classList.add("media-error");
+        imageNode.src = publicStateIllustrations.error;
+        imageNode.alt = "Media could not be loaded";
+      },
+      { once: true },
+    );
+  };
+
+  const attachVideoLoadingState = (videoNode) => {
+    if (!videoNode) return;
+    const frame = videoNode.closest(".eys-player-frame");
+    if (!frame) return;
+
+    const clearLoading = () => {
+      frame.classList.remove("is-video-loading");
+    };
+
+    frame.classList.add("is-video-loading");
+
+    if (videoNode.readyState >= 2) {
+      clearLoading();
+    }
+
+    videoNode.addEventListener("loadeddata", clearLoading, { once: true });
+    videoNode.addEventListener(
+      "error",
+      () => {
+        clearLoading();
+        frame.classList.add("is-video-error");
+        if (frame.querySelector(".video-error-state")) return;
+        frame.insertAdjacentHTML(
+          "beforeend",
+          `<div class="video-error-state">${renderPublicStateCard({
+            kind: "error",
+            title: "Video unavailable",
+            message: "This clip could not be loaded right now.",
+            illustration: publicStateIllustrations.error,
+          })}</div>`,
+        );
+      },
+      { once: true },
+    );
+  };
+
+  const eventList = document.querySelector(".event-list");
+  if (eventList && !eventList.querySelector("article, .route-card")) {
+    eventList.innerHTML = renderPublicStateCard({
+      title: "No events listed yet",
+      message: "Upcoming community sessions and gatherings will appear here.",
+      illustration: publicStateIllustrations.empty,
+    });
+  }
+
+  const communityStrip = document.querySelector(".image-strip");
+  if (communityStrip && !communityStrip.querySelector("img")) {
+    communityStrip.innerHTML = renderPublicStateCard({
+      title: "Community photos coming soon",
+      message: "New photo highlights will appear here as moments are documented.",
+      illustration: publicStateIllustrations.empty,
+    });
+  }
+
+  if (communityStrip) {
+    communityStrip.querySelectorAll("img").forEach((imageNode) => attachImageLoadingState(imageNode));
+  }
+
+  const galleryContainers = document.querySelectorAll(".gallery-feature, .gallery-masonry a");
+  galleryContainers.forEach((container) => {
+    const imageNode = container.querySelector("img");
+    attachImageLoadingState(imageNode, container);
+  });
+
+  const galleryMasonry = document.querySelector(".gallery-masonry");
+  if (galleryMasonry && !galleryMasonry.querySelector("img")) {
+    galleryMasonry.innerHTML = renderPublicStateCard({
+      title: "Gallery archive is empty",
+      message: "Photos will appear here once the archive is updated.",
+      illustration: publicStateIllustrations.empty,
+    });
+  }
+
+  document.querySelectorAll(".video-gallery video").forEach(attachVideoLoadingState);
+};
+
+initializeStaticMediaStates();
+
 if (joinForm) {
   const detailsStep = joinForm.querySelector("[data-details-step]");
   const profileStep = joinForm.querySelector("[data-profile-step]");
@@ -581,7 +728,6 @@ if (joinForm) {
 
   photoInput?.addEventListener("change", () => {
     const file = photoInput.files?.[0];
-
     if (photoName) {
       photoName.textContent = file ? file.name : "JPG, PNG or WebP";
     }
@@ -735,7 +881,7 @@ if (adminApp) {
   };
 
   const setButtonLoading = (button, loadingText = "Loading...") => {
-    if (!button) return () => {};
+    if (!button) return () => { };
     const originalText = button.textContent;
     const hadDisabled = button.disabled;
     button.disabled = true;
@@ -764,8 +910,8 @@ if (adminApp) {
   const renderListSkeleton = (rows = 4) => `
     <div class="admin-skeleton-list" aria-hidden="true">
       ${Array.from({ length: rows })
-        .map(
-          () => `
+      .map(
+        () => `
             <article class="admin-item admin-item-skeleton">
               <div>
                 <span class="skeleton-block skeleton-title"></span>
@@ -779,8 +925,8 @@ if (adminApp) {
               </div>
             </article>
           `,
-        )
-        .join("")}
+      )
+      .join("")}
     </div>
   `;
 
@@ -1031,8 +1177,8 @@ if (adminApp) {
       const recent = rawRequests.slice(0, 4);
       overviewRequestsList.innerHTML = recent.length
         ? recent
-            .map(
-              (r) => `
+          .map(
+            (r) => `
                 <div class="admin-item" style="padding: 14px;">
                   <div>
                     <div class="admin-item-title" style="font-size: 15px;">${escapeHtml(r.name)}</div>
@@ -1041,21 +1187,21 @@ if (adminApp) {
                   <div><span class="status-pill ${escapeHtml(r.status)}">${escapeHtml(r.status)}</span></div>
                 </div>
               `,
-            )
-            .join("")
+          )
+          .join("")
         : renderStateCard({
-            title: "No join requests yet",
-            message: "New applications will appear here as people submit the join form.",
-            illustration: stateIllustrations.empty,
-          });
+          title: "No join requests yet",
+          message: "New applications will appear here as people submit the join form.",
+          illustration: stateIllustrations.empty,
+        });
     }
 
     if (overviewBlogList) {
       const recentPosts = rawPosts.slice(0, 4);
       overviewBlogList.innerHTML = recentPosts.length
         ? recentPosts
-            .map(
-              (p) => `
+          .map(
+            (p) => `
                 <div class="admin-item" style="padding: 14px;">
                   <div>
                     <div class="admin-item-title" style="font-size: 15px;">${escapeHtml(p.title)}</div>
@@ -1064,13 +1210,13 @@ if (adminApp) {
                   <div><span class="status-pill ${escapeHtml(p.status)}">${escapeHtml(p.status)}</span></div>
                 </div>
               `,
-            )
-            .join("")
+          )
+          .join("")
         : renderStateCard({
-            title: "No blog posts yet",
-            message: "Published and draft posts will appear here once your team starts writing.",
-            illustration: stateIllustrations.empty,
-          });
+          title: "No blog posts yet",
+          message: "Published and draft posts will appear here once your team starts writing.",
+          illustration: stateIllustrations.empty,
+        });
     }
   };
 
@@ -1150,7 +1296,7 @@ if (adminApp) {
 
     requestsList.innerHTML = filtered
       .map(
-            (request) => `
+        (request) => `
               <article class="admin-item">
                 <div>
                   <div class="admin-item-title">${escapeHtml(request.name)}</div>
@@ -1170,7 +1316,7 @@ if (adminApp) {
                 </div>
               </article>
             `,
-          )
+      )
       .join("");
 
     requestsList.querySelectorAll("[data-promote-request]").forEach((button) => {
@@ -1289,7 +1435,7 @@ if (adminApp) {
 
     membersList.innerHTML = filtered
       .map(
-            (member) => `
+        (member) => `
               <article class="admin-item">
                 <div class="admin-item-content">
                   ${member.imageUrl ? `<img src="${escapeHtml(member.imageUrl)}" alt="${escapeHtml(member.name)}" class="admin-item-avatar" />` : ""}
@@ -1297,11 +1443,10 @@ if (adminApp) {
                     <div class="admin-item-title">${escapeHtml(member.name)}</div>
                     <p><strong>${escapeHtml(member.role)}</strong>${member.location ? ` · ${escapeHtml(member.location)}` : ""}</p>
                     <p>${escapeHtml(member.bio)}</p>
-                    ${
-                      member.skills?.length
-                        ? `<div class="mini-tags" style="margin-top:6px;">${member.skills.map((skill) => `<span class="status-pill">${escapeHtml(skill)}</span>`).join(" ")}</div>`
-                        : ""
-                    }
+                    ${member.skills?.length
+            ? `<div class="mini-tags" style="margin-top:6px;">${member.skills.map((skill) => `<span class="status-pill">${escapeHtml(skill)}</span>`).join(" ")}</div>`
+            : ""
+          }
                     ${member.businessName ? `<p>Project: ${escapeHtml(member.businessName)}</p>` : ""}
                   </div>
                 </div>
@@ -1312,7 +1457,7 @@ if (adminApp) {
                 </div>
               </article>
             `,
-          )
+      )
       .join("");
 
     membersList.querySelectorAll("[data-edit-member]").forEach((button) => {
@@ -1379,7 +1524,7 @@ if (adminApp) {
 
     postsList.innerHTML = filtered
       .map(
-            (post) => `
+        (post) => `
               <article class="admin-item">
                 <div class="admin-item-content">
                   ${post.coverImageUrl ? `<img src="${escapeHtml(post.coverImageUrl)}" alt="${escapeHtml(post.title)}" class="admin-item-thumb" />` : ""}
@@ -1396,7 +1541,7 @@ if (adminApp) {
                 </div>
               </article>
             `,
-          )
+      )
       .join("");
 
     postsList.querySelectorAll("[data-edit-post]").forEach((button) => {
@@ -1495,17 +1640,16 @@ if (adminApp) {
 
     impactReportsList.innerHTML = filtered
       .map(
-            (report) => `
+        (report) => `
               <article class="admin-item">
                 <div>
                   <div class="admin-item-title">${escapeHtml(report.title)}</div>
                   <p><strong>Period:</strong> ${escapeHtml(report.period)}</p>
                   <p>${escapeHtml(report.summary)}</p>
-                  ${
-                    report.metricHighlights?.length
-                      ? `<div class="mini-tags" style="margin-top:6px;">${report.metricHighlights.map((item) => `<span class="status-pill">${escapeHtml(item)}</span>`).join(" ")}</div>`
-                      : ""
-                  }
+                  ${report.metricHighlights?.length
+            ? `<div class="mini-tags" style="margin-top:6px;">${report.metricHighlights.map((item) => `<span class="status-pill">${escapeHtml(item)}</span>`).join(" ")}</div>`
+            : ""
+          }
                 </div>
                 <div class="admin-item-meta">
                   <span class="status-pill ${escapeHtml(report.status)}">${escapeHtml(report.status)}</span>
@@ -1514,7 +1658,7 @@ if (adminApp) {
                 </div>
               </article>
             `,
-          )
+      )
       .join("");
 
     impactReportsList.querySelectorAll("[data-edit-impact-report]").forEach((button) => {
@@ -1603,7 +1747,7 @@ if (adminApp) {
 
     governanceList.innerHTML = filtered
       .map(
-            (profile) => `
+        (profile) => `
               <article class="admin-item">
                 <div class="admin-item-content">
                   ${profile.imageUrl ? `<img src="${escapeHtml(profile.imageUrl)}" alt="${escapeHtml(profile.name)}" class="admin-item-avatar" />` : ""}
@@ -1621,7 +1765,7 @@ if (adminApp) {
                 </div>
               </article>
             `,
-          )
+      )
       .join("");
 
     governanceList.querySelectorAll("[data-edit-governance]").forEach((button) => {
@@ -1710,7 +1854,7 @@ if (adminApp) {
 
     partnersList.innerHTML = filtered
       .map(
-            (partner) => `
+        (partner) => `
               <article class="admin-item">
                 <div class="admin-item-content">
                   ${partner.logoUrl ? `<img src="${escapeHtml(partner.logoUrl)}" alt="${escapeHtml(partner.name)}" class="admin-item-logo" />` : ""}
@@ -1727,7 +1871,7 @@ if (adminApp) {
                 </div>
               </article>
             `,
-          )
+      )
       .join("");
 
     partnersList.querySelectorAll("[data-edit-partner]").forEach((button) => {
@@ -2242,6 +2386,15 @@ if (membersApp) {
   const status = membersApp.querySelector("[data-members-status]");
   const list = membersApp.querySelector("[data-members-list]");
 
+  if (status) {
+    status.hidden = false;
+    status.textContent = "Loading members...";
+    status.dataset.state = "loading";
+  }
+  if (list) {
+    list.innerHTML = renderPublicGridSkeleton("member", 6);
+  }
+
   const initials = (name) =>
     name
       .split(/\s+/)
@@ -2254,37 +2407,38 @@ if (membersApp) {
     if (!list) return;
     list.innerHTML = members.length
       ? members
-          .map(
-            (member) => `
+        .map(
+          (member) => `
               <article class="member-card">
-                ${
-                  member.imageUrl
-                    ? `<img src="${escapeHtml(member.imageUrl)}" alt="${escapeHtml(member.name)}" />`
-                    : `<div class="member-avatar" aria-hidden="true">${escapeHtml(initials(member.name))}</div>`
-                }
+                ${member.imageUrl
+              ? `<img src="${escapeHtml(member.imageUrl)}" alt="${escapeHtml(member.name)}" />`
+              : `<div class="member-avatar" aria-hidden="true">${escapeHtml(initials(member.name))}</div>`
+            }
                 <div class="member-card-body">
                   <h2>${escapeHtml(member.name)}</h2>
                   ${member.location ? `<p class="member-location">${escapeHtml(member.location)}</p>` : ""}
                   <p>${escapeHtml(member.bio)}</p>
-                  ${
-                    member.skills?.length
-                      ? `<div class="mini-tags">${member.skills.map((skill) => `<span>${escapeHtml(skill)}</span>`).join("")}</div>`
-                      : ""
-                  }
-                  ${
-                    member.businessName || member.websiteUrl
-                      ? `<div class="member-project">
+                  ${member.skills?.length
+              ? `<div class="mini-tags">${member.skills.map((skill) => `<span>${escapeHtml(skill)}</span>`).join("")}</div>`
+              : ""
+            }
+                  ${member.businessName || member.websiteUrl
+              ? `<div class="member-project">
                           ${member.businessName ? `<strong>${escapeHtml(member.businessName)}</strong>` : ""}
                           ${member.websiteUrl ? `<a class="text-link" href="${escapeHtml(member.websiteUrl)}" target="_blank" rel="noreferrer">Visit link</a>` : ""}
                         </div>`
-                      : ""
-                  }
+              : ""
+            }
                 </div>
               </article>
             `,
-          )
-          .join("")
-      : '<p class="empty-state">Approved member profiles will appear here soon.</p>';
+        )
+        .join("")
+      : renderPublicStateCard({
+        title: "No approved members yet",
+        message: "Approved member profiles will appear here as the community directory grows.",
+        illustration: publicStateIllustrations.empty,
+      });
   };
 
   (async () => {
@@ -2292,9 +2446,18 @@ if (membersApp) {
       renderMembers(await eysApi("/api/members"));
       if (status) status.hidden = true;
     } catch (error) {
+      if (list) {
+        list.innerHTML = renderPublicStateCard({
+          kind: "error",
+          title: "Could not load members",
+          message: error.message,
+          illustration: publicStateIllustrations.error,
+        });
+      }
       if (status) {
-        status.textContent = error.message;
+        status.textContent = "Unable to load members right now.";
         status.dataset.state = "error";
+        status.hidden = false;
       }
     }
   })();
@@ -2303,25 +2466,36 @@ if (membersApp) {
 const impactApp = document.querySelector("[data-impact-app]");
 
 if (impactApp) {
-  const status = impactApp.querySelector("[data-impact-status]");
+  const statusNodes = Array.from(impactApp.querySelectorAll("[data-impact-status]"));
   const reportsList = impactApp.querySelector("[data-impact-reports-list]");
   const governanceList = impactApp.querySelector("[data-governance-profiles-list]");
+
+  statusNodes.forEach((node) => {
+    node.hidden = false;
+    node.textContent = "Loading accountability updates...";
+    node.dataset.state = "loading";
+  });
+  if (reportsList) {
+    reportsList.innerHTML = renderPublicGridSkeleton("impact", 2);
+  }
+  if (governanceList) {
+    governanceList.innerHTML = renderPublicGridSkeleton("governance", 3);
+  }
 
   const renderReports = (reports) => {
     if (!reportsList) return;
     reportsList.innerHTML = reports.length
       ? reports
-          .map(
-            (report) => `
+        .map(
+          (report) => `
               <article class="impact-card">
                 <div>
                   <h3>${escapeHtml(report.title)}</h3>
                   <p>${escapeHtml(report.summary)}</p>
-                  ${
-                    report.metricHighlights?.length
-                      ? `<div class="mini-tags">${report.metricHighlights.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>`
-                      : ""
-                  }
+                  ${report.metricHighlights?.length
+              ? `<div class="mini-tags">${report.metricHighlights.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>`
+              : ""
+            }
                 </div>
                 <div class="impact-card-footer">
                   <time>${formatDate(report.publishedAt)}</time>
@@ -2329,32 +2503,39 @@ if (impactApp) {
                 </div>
               </article>
             `,
-          )
-          .join("")
-      : '<p class="empty-state">Formal impact reports will appear here as EYS publishes them.</p>';
+        )
+        .join("")
+      : renderPublicStateCard({
+        title: "No impact reports yet",
+        message: "Formal impact reports will appear here as EYS publishes them.",
+        illustration: publicStateIllustrations.empty,
+      });
   };
 
   const renderGovernance = (profiles) => {
     if (!governanceList) return;
     governanceList.innerHTML = profiles.length
       ? profiles
-          .map(
-            (profile) => `
+        .map(
+          (profile) => `
               <article class="governance-card">
-                ${
-                  profile.imageUrl
-                    ? `<img src="${escapeHtml(profile.imageUrl)}" alt="${escapeHtml(profile.name)}" />`
-                    : `<div class="governance-avatar" aria-hidden="true">${escapeHtml(profile.name.slice(0, 2).toUpperCase())}</div>`
-                }
+                ${profile.imageUrl
+              ? `<img src="${escapeHtml(profile.imageUrl)}" alt="${escapeHtml(profile.name)}" />`
+              : `<div class="governance-avatar" aria-hidden="true">${escapeHtml(profile.name.slice(0, 2).toUpperCase())}</div>`
+            }
                 <div>
                   <h3>${escapeHtml(profile.name)}</h3>
                   <p>${escapeHtml(profile.bio)}</p>
                 </div>
               </article>
             `,
-          )
-          .join("")
-      : '<p class="empty-state">Confirmed governance and team profiles will appear here.</p>';
+        )
+        .join("")
+      : renderPublicStateCard({
+        title: "No governance profiles yet",
+        message: "Confirmed governance and team profiles will appear here.",
+        illustration: publicStateIllustrations.empty,
+      });
   };
 
   (async () => {
@@ -2365,12 +2546,31 @@ if (impactApp) {
       ]);
       renderReports(reports);
       renderGovernance(profiles);
-      if (status) status.hidden = true;
+      statusNodes.forEach((node) => {
+        node.hidden = true;
+      });
     } catch (error) {
-      if (status) {
-        status.textContent = error.message;
-        status.dataset.state = "error";
+      if (reportsList) {
+        reportsList.innerHTML = renderPublicStateCard({
+          kind: "error",
+          title: "Could not load impact reports",
+          message: error.message,
+          illustration: publicStateIllustrations.error,
+        });
       }
+      if (governanceList) {
+        governanceList.innerHTML = renderPublicStateCard({
+          kind: "error",
+          title: "Could not load governance profiles",
+          message: error.message,
+          illustration: publicStateIllustrations.error,
+        });
+      }
+      statusNodes.forEach((node) => {
+        node.textContent = "Unable to load accountability updates right now.";
+        node.dataset.state = "error";
+        node.hidden = false;
+      });
     }
   })();
 }
@@ -2384,6 +2584,21 @@ if (blogApp) {
   const params = new URLSearchParams(window.location.search);
   const slug = params.get("post");
 
+  if (status) {
+    status.hidden = false;
+    status.textContent = slug ? "Loading post..." : "Loading updates...";
+    status.dataset.state = "loading";
+  }
+  if (slug) {
+    if (list) list.hidden = true;
+    if (article) {
+      article.hidden = false;
+      article.innerHTML = renderPublicGridSkeleton("blog", 1);
+    }
+  } else if (list) {
+    list.innerHTML = renderPublicGridSkeleton("blog", 6);
+  }
+
   const renderPost = (post) => {
     if (!article || !list) return;
     list.hidden = true;
@@ -2396,9 +2611,9 @@ if (blogApp) {
       <p class="blog-excerpt">${escapeHtml(post.excerpt)}</p>
       <div class="blog-body">
         ${escapeHtml(post.body)
-          .split(/\n{2,}/)
-          .map((paragraph) => `<p>${paragraph.replace(/\n/g, "<br />")}</p>`)
-          .join("")}
+        .split(/\n{2,}/)
+        .map((paragraph) => `<p>${paragraph.replace(/\n/g, "<br />")}</p>`)
+        .join("")}
       </div>
     `;
   };
@@ -2407,8 +2622,8 @@ if (blogApp) {
     if (!list) return;
     list.innerHTML = posts.length
       ? posts
-          .map(
-            (post) => `
+        .map(
+          (post) => `
               <article class="blog-card">
                 ${post.coverImageUrl ? `<img src="${escapeHtml(post.coverImageUrl)}" alt="" />` : ""}
                 <div>
@@ -2419,9 +2634,13 @@ if (blogApp) {
                 </div>
               </article>
             `,
-          )
-          .join("")
-      : '<p class="empty-state">No published posts yet.</p>';
+        )
+        .join("")
+      : renderPublicStateCard({
+        title: "No published posts yet",
+        message: "Community updates will appear here once new stories are published.",
+        illustration: publicStateIllustrations.empty,
+      });
   };
 
   (async () => {
@@ -2434,9 +2653,28 @@ if (blogApp) {
       }
       if (status) status.hidden = true;
     } catch (error) {
+      if (slug) {
+        if (article) {
+          article.hidden = false;
+          article.innerHTML = renderPublicStateCard({
+            kind: "error",
+            title: "Could not load this post",
+            message: error.message,
+            illustration: publicStateIllustrations.error,
+          });
+        }
+      } else if (list) {
+        list.innerHTML = renderPublicStateCard({
+          kind: "error",
+          title: "Could not load updates",
+          message: error.message,
+          illustration: publicStateIllustrations.error,
+        });
+      }
       if (status) {
-        status.textContent = error.message;
+        status.textContent = "Unable to load updates right now.";
         status.dataset.state = "error";
+        status.hidden = false;
       }
     }
   })();

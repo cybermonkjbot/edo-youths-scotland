@@ -1400,6 +1400,80 @@ img {
   transition: transform 260ms ease, opacity 260ms ease;
 }
 
+.gallery-feature.media-loading,
+.gallery-masonry a.media-loading,
+.image-strip img.media-loading,
+.eys-player-frame.is-video-loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-feature.media-loading::before,
+.gallery-masonry a.media-loading::before,
+.eys-player-frame.is-video-loading::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: linear-gradient(90deg, #e9e5d9 0%, #f7f4eb 45%, #e9e5d9 100%);
+  background-size: 220px 100%;
+  animation: mediaShimmer 1.3s linear infinite;
+}
+
+.gallery-feature.media-loading img,
+.gallery-masonry a.media-loading img {
+  opacity: 0;
+}
+
+.image-strip img.media-loading {
+  background: linear-gradient(90deg, #e9e5d9 0%, #f7f4eb 45%, #e9e5d9 100%);
+  background-size: 220px 100%;
+  animation: mediaShimmer 1.3s linear infinite;
+  opacity: 0.06;
+}
+
+.gallery-feature.media-error,
+.gallery-masonry a.media-error {
+  background: rgba(220, 38, 38, 0.06);
+}
+
+.gallery-feature.media-error img,
+.gallery-masonry a.media-error img,
+.image-strip img.media-error {
+  object-fit: contain;
+  padding: 18px;
+  opacity: 1;
+  background: rgba(220, 38, 38, 0.03);
+}
+
+.eys-player-frame.is-video-error video,
+.eys-player-frame.is-video-error .eys-player-poster {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.video-error-state {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  padding: 14px;
+}
+
+.video-error-state .content-state {
+  width: 100%;
+  height: 100%;
+  align-content: center;
+}
+
+@keyframes mediaShimmer {
+  to {
+    background-position: 220px 0;
+  }
+}
+
 .gallery-feature::after {
   content: "";
   position: absolute;
@@ -1891,6 +1965,30 @@ img {
 .form-status[data-state="error"],
 .blog-status[data-state="error"] {
   color: #a13312;
+}
+
+.form-status[data-state="loading"],
+.blog-status[data-state="loading"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-status[data-state="loading"]::before,
+.blog-status[data-state="loading"]::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: statusSpin 0.8s linear infinite;
+}
+
+@keyframes statusSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==========================================================================
@@ -3343,6 +3441,100 @@ body.admin-body {
 .blog-shell {
   display: grid;
   gap: 26px;
+}
+
+.content-state {
+  display: grid;
+  gap: 10px;
+  place-items: center;
+  text-align: center;
+  border: 1px dashed rgba(5, 60, 42, 0.18);
+  background: #fbf9f4;
+  border-radius: 12px;
+  padding: 28px 20px;
+}
+
+.content-state-illustration {
+  width: min(220px, 100%);
+  height: auto;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+.content-state-title {
+  margin: 0;
+  color: var(--green);
+  font-size: 23px;
+  line-height: 1.2;
+}
+
+.content-state-message {
+  margin: 0;
+  max-width: 55ch;
+  color: var(--muted);
+}
+
+.content-state-error {
+  border-color: rgba(220, 38, 38, 0.24);
+  background: rgba(220, 38, 38, 0.04);
+}
+
+.content-state-error .content-state-title {
+  color: #b91c1c;
+}
+
+.public-skeleton-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(5, 60, 42, 0.14);
+  background: #ffffff;
+}
+
+.public-skeleton-media,
+.public-skeleton-line {
+  display: block;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #ece9df 0%, #f8f5eb 45%, #ece9df 100%);
+  background-size: 220px 100%;
+  animation: publicShimmer 1.35s linear infinite;
+}
+
+.public-skeleton-media {
+  width: 100%;
+  height: 210px;
+  border-radius: 0;
+}
+
+.public-skeleton-body {
+  display: grid;
+  gap: 11px;
+  padding: 22px;
+}
+
+.public-skeleton-line {
+  height: 13px;
+}
+
+.public-skeleton-line.title {
+  width: 74%;
+  height: 17px;
+}
+
+.public-skeleton-line.short {
+  width: 62%;
+}
+
+.public-skeleton-line.tiny {
+  width: 36%;
+  margin-top: 8px;
+}
+
+@keyframes publicShimmer {
+  to {
+    background-position: 220px 0;
+  }
 }
 
 .blog-grid,

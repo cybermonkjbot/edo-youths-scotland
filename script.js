@@ -1684,7 +1684,17 @@ if (adminApp) {
   };
 
   loginForm?.addEventListener("submit", handleAdminLogin);
-  adminApp.querySelector(".admin-submit-btn")?.addEventListener("click", handleAdminLogin);
+  adminApp.querySelectorAll(".admin-submit-btn, [data-admin-submit-btn]").forEach((btn) => {
+    btn.addEventListener("click", handleAdminLogin);
+  });
+
+  loginForm?.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        handleAdminLogin(e);
+      }
+    });
+  });
 
   adminApp.querySelectorAll("[data-admin-logout]").forEach((btn) => {
     btn.addEventListener("click", async () => {

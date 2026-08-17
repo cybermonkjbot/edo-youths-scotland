@@ -832,6 +832,11 @@ if (adminApp) {
         setFileValue("");
       });
 
+      zone._setFileValue = setFileValue;
+      setFileValue(hiddenInput.value);
+    });
+  };
+
   const setSelectValue = (selectElement, val) => {
     if (!selectElement) return;
     if (!val) {
